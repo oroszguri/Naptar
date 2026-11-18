@@ -6,28 +6,28 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Szalon Napló" />
-  <meta name="theme-color" content="#fae4ec" />
+  <meta name="theme-color" content="#f3e9dc" />
   <title>Szalon Napló — Kozmetika & Fodrászat</title>
   <style>
     :root {
-      --bg-main: #fdf7f9;
-      --bg-soft: #fbeff3;
+      --bg-main: #faf6f1;
+      --bg-soft: #f4ede4;
       --bg-card: #ffffff;
-      --pink-100: #fae6ed;
-      --pink-200: #f3cddb;
-      --pink-300: #e7adc3;
-      --pink-400: #d982a3;
-      --pink-500: #c56288;
-      --pink-600: #a8496e;
-      --text-main: #3b262e;
-      --text-muted: #7f616d;
-      --border: #f1d8e1;
-      --success-bg: #eaf6ef;
-      --success-text: #2e6f51;
-      --done-bg: #f3e8ec;
-      --done-text: #865668;
-      --shadow-sm: 0 4px 14px rgba(197, 98, 136, 0.08);
-      --shadow-md: 0 10px 28px rgba(197, 98, 136, 0.14);
+      --beige-100: #f3eadf;
+      --beige-200: #e5d6c3;
+      --beige-300: #d4bfa4;
+      --beige-400: #bc9f7e;
+      --beige-500: #9f7f5c;
+      --beige-600: #826444;
+      --text-main: #3b2f24;
+      --text-muted: #786858;
+      --border: #eadfce;
+      --success-bg: #eaf3eb;
+      --success-text: #2f6647;
+      --done-bg: #efe7dc;
+      --done-text: #7a644b;
+      --shadow-sm: 0 4px 14px rgba(130, 100, 68, 0.08);
+      --shadow-md: 0 10px 28px rgba(130, 100, 68, 0.14);
       --radius-lg: 20px;
       --radius-md: 14px;
       --radius-sm: 10px;
@@ -48,8 +48,8 @@
       min-height: 100vh;
       overflow-x: hidden;
       background-image:
-        radial-gradient(circle at 8% 10%, rgba(243, 205, 219, 0.45) 0%, transparent 34%),
-        radial-gradient(circle at 92% 85%, rgba(243, 205, 219, 0.38) 0%, transparent 38%);
+        radial-gradient(circle at 8% 10%, rgba(229, 214, 195, 0.5) 0%, transparent 34%),
+        radial-gradient(circle at 92% 85%, rgba(212, 191, 164, 0.38) 0%, transparent 38%);
     }
 
     h1, h2, h3 {
@@ -65,12 +65,12 @@
       transition: max-width 0.2s ease;
     }
 
-    /* Header Banner with Soft Pink Floral SVG Graphics */
+    /* Header Banner with Soft Beige Botanical SVG Graphics */
     .hero-header {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, #fff6f9 0%, #fae4ec 55%, #f5d3e0 100%);
-      border: 1px solid var(--pink-200);
+      background: linear-gradient(135deg, #fcf9f5 0%, #f3e9dc 55%, #e8d9c5 100%);
+      border: 1px solid var(--beige-200);
       border-radius: var(--radius-lg);
       padding: 22px 26px;
       margin-bottom: 18px;
@@ -101,20 +101,20 @@
       align-items: center;
       gap: 6px;
       background: rgba(255, 255, 255, 0.92);
-      color: var(--pink-600);
-      border: 1px solid var(--pink-300);
+      color: var(--beige-600);
+      border: 1px solid var(--beige-300);
       border-radius: 999px;
       padding: 7px 14px;
       font-family: inherit;
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(197, 98, 136, 0.12);
+      box-shadow: 0 2px 8px rgba(130, 100, 68, 0.12);
     }
 
     .view-toggle-btn:hover {
       background: #ffffff;
-      border-color: var(--pink-500);
+      border-color: var(--beige-500);
     }
 
     .view-toggle-btn svg {
@@ -128,8 +128,8 @@
       align-items: center;
       gap: 6px;
       background: rgba(255, 255, 255, 0.88);
-      color: var(--pink-600);
-      border: 1px solid var(--pink-200);
+      color: var(--beige-600);
+      border: 1px solid var(--beige-200);
       font-size: 0.78rem;
       font-weight: 600;
       padding: 4px 12px;
@@ -196,13 +196,13 @@
 
     .nav-btn:hover {
       background: var(--bg-soft);
-      color: var(--pink-600);
+      color: var(--beige-600);
     }
 
     .nav-btn.active {
-      background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+      background: linear-gradient(135deg, var(--beige-400), var(--beige-500));
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(197, 98, 136, 0.28);
+      box-shadow: 0 4px 12px rgba(159, 127, 92, 0.28);
     }
 
     .nav-btn svg {
@@ -277,23 +277,23 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+      background: linear-gradient(135deg, var(--beige-400), var(--beige-500));
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(197, 98, 136, 0.25);
+      box-shadow: 0 4px 12px rgba(159, 127, 92, 0.25);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+      background: linear-gradient(135deg, var(--beige-500), var(--beige-600));
     }
 
     .btn-soft {
-      background: var(--pink-100);
-      color: var(--pink-600);
-      border-color: var(--pink-200);
+      background: var(--beige-100);
+      color: var(--beige-600);
+      border-color: var(--beige-200);
     }
 
     .btn-soft:hover {
-      background: var(--pink-200);
+      background: var(--beige-200);
     }
 
     .btn-outline {
@@ -304,13 +304,13 @@
 
     .btn-outline:hover {
       background: var(--bg-soft);
-      border-color: var(--pink-300);
+      border-color: var(--beige-300);
     }
 
     .btn-danger-soft {
-      background: #fdf0f3;
-      color: #b43c5e;
-      border-color: #f4cdd8;
+      background: #f9ece8;
+      color: #9e473b;
+      border-color: #e8cbc3;
       padding: 6px 10px;
       font-size: 0.81rem;
     }
@@ -369,23 +369,23 @@
     }
 
     .cal-day:hover {
-      border-color: var(--pink-400);
+      border-color: var(--beige-400);
       background: #ffffff;
     }
 
     .cal-day.other-month {
       opacity: 0.42;
-      background: #faf5f7;
+      background: #f6f1eb;
     }
 
     .cal-day.today {
-      border: 2px solid var(--pink-400);
+      border: 2px solid var(--beige-400);
     }
 
     .cal-day.selected {
-      background: var(--pink-100);
-      border-color: var(--pink-500);
-      box-shadow: inset 0 0 0 1px var(--pink-400);
+      background: var(--beige-100);
+      border-color: var(--beige-500);
+      box-shadow: inset 0 0 0 1px var(--beige-400);
     }
 
     .cal-day-num {
@@ -399,7 +399,7 @@
     }
 
     .cal-count-pill {
-      background: var(--pink-500);
+      background: var(--beige-500);
       color: #ffffff;
       font-size: 0.68rem;
       font-weight: 700;
@@ -417,7 +417,7 @@
 
     .cal-mini-item {
       background: #ffffff;
-      border-left: 3px solid var(--pink-400);
+      border-left: 3px solid var(--beige-400);
       padding: 2px 5px;
       border-radius: 4px;
       font-size: 0.7rem;
@@ -438,7 +438,7 @@
     .appt-item {
       background: var(--bg-main);
       border: 1px solid var(--border);
-      border-left: 4px solid var(--pink-400);
+      border-left: 4px solid var(--beige-400);
       border-radius: var(--radius-md);
       padding: 14px 15px;
       display: flex;
@@ -464,7 +464,7 @@
 
     .appt-time {
       display: inline-block;
-      background: var(--pink-500);
+      background: var(--beige-500);
       color: #ffffff;
       font-weight: 700;
       font-size: 0.8rem;
@@ -482,7 +482,7 @@
 
     .appt-phone {
       font-size: 0.85rem;
-      color: var(--pink-600);
+      color: var(--beige-600);
       text-decoration: none;
       font-weight: 500;
     }
@@ -495,7 +495,7 @@
 
     .service-tag {
       background: #ffffff;
-      border: 1px solid var(--pink-200);
+      border: 1px solid var(--beige-200);
       color: var(--text-main);
       font-size: 0.79rem;
       padding: 3px 9px;
@@ -511,13 +511,13 @@
       flex-wrap: wrap;
       gap: 6px;
       padding-top: 7px;
-      border-top: 1px dashed var(--pink-200);
+      border-top: 1px dashed var(--beige-200);
       font-size: 0.9rem;
     }
 
     .price-highlight {
       font-weight: 700;
-      color: var(--pink-600);
+      color: var(--beige-600);
       font-size: 1rem;
     }
 
@@ -553,7 +553,7 @@
       max-width: 100%;
       padding: 10px 12px;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--pink-200);
+      border: 1px solid var(--beige-200);
       background: #ffffff;
       font-family: inherit;
       font-size: 16px;
@@ -562,8 +562,8 @@
     }
 
     input:focus, select:focus, textarea:focus {
-      border-color: var(--pink-500);
-      box-shadow: 0 0 0 3px rgba(217, 130, 163, 0.2);
+      border-color: var(--beige-500);
+      box-shadow: 0 0 0 3px rgba(188, 159, 126, 0.22);
     }
 
     /* Checklist Boxes */
@@ -588,8 +588,8 @@
     }
 
     .check-card.checked {
-      background: var(--pink-100);
-      border-color: var(--pink-400);
+      background: var(--beige-100);
+      border-color: var(--beige-400);
     }
 
     .check-left {
@@ -602,7 +602,7 @@
     .check-left input[type="checkbox"] {
       width: 19px;
       height: 19px;
-      accent-color: var(--pink-500);
+      accent-color: var(--beige-500);
       cursor: pointer;
       flex-shrink: 0;
     }
@@ -621,7 +621,7 @@
 
     .check-price {
       font-weight: 700;
-      color: var(--pink-600);
+      color: var(--beige-600);
       font-size: 0.9rem;
       white-space: nowrap;
       flex-shrink: 0;
@@ -630,8 +630,8 @@
     /* Total Summary Bar */
     .total-banner {
       margin-top: 16px;
-      background: linear-gradient(135deg, #fbe8ef, #f6d5e2);
-      border: 1px solid var(--pink-300);
+      background: linear-gradient(135deg, #f5ede3, #ebdecb);
+      border: 1px solid var(--beige-300);
       border-radius: var(--radius-md);
       padding: 15px 18px;
       display: flex;
@@ -645,7 +645,7 @@
       font-family: Georgia, "Times New Roman", serif;
       font-size: 1.6rem;
       font-weight: 700;
-      color: var(--pink-600);
+      color: var(--beige-600);
     }
 
     /* Tables / Lists */
@@ -667,7 +667,7 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      border-bottom: 1px solid var(--pink-200);
+      border-bottom: 1px solid var(--beige-200);
     }
 
     td {
@@ -696,8 +696,8 @@
     }
 
     .badge-cat {
-      background: var(--pink-100);
-      color: var(--pink-600);
+      background: var(--beige-100);
+      color: var(--beige-600);
     }
 
     /* Progress bar for statistics */
@@ -705,7 +705,7 @@
       width: 100%;
       min-width: 70px;
       height: 8px;
-      background: var(--pink-100);
+      background: var(--beige-100);
       border-radius: 999px;
       overflow: hidden;
       margin-top: 4px;
@@ -713,7 +713,7 @@
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--pink-400), var(--pink-500));
+      background: linear-gradient(90deg, var(--beige-400), var(--beige-500));
       border-radius: 999px;
     }
 
@@ -722,7 +722,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(59, 38, 46, 0.45);
+      background: rgba(59, 47, 36, 0.45);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -735,7 +735,7 @@
 
     .modal-box {
       background: #ffffff;
-      border: 1px solid var(--pink-200);
+      border: 1px solid var(--beige-200);
       border-radius: var(--radius-lg);
       max-width: 640px;
       width: 100%;
@@ -750,7 +750,7 @@
       padding: 24px 14px;
       color: var(--text-muted);
       background: var(--bg-main);
-      border: 1px dashed var(--pink-200);
+      border: 1px dashed var(--beige-200);
       border-radius: var(--radius-md);
       font-size: 0.9rem;
     }
@@ -764,7 +764,7 @@
 
     .stat-box {
       background: var(--bg-soft);
-      border: 1px solid var(--pink-200);
+      border: 1px solid var(--beige-200);
       border-radius: var(--radius-md);
       padding: 13px 15px;
     }
@@ -778,7 +778,7 @@
     .stat-value {
       font-size: 1.3rem;
       font-weight: 700;
-      color: var(--pink-600);
+      color: var(--beige-600);
       margin-top: 2px;
     }
 
@@ -811,6 +811,17 @@
       gap: 12px;
       font-size: 0.84rem;
       color: var(--text-muted);
+    }
+
+    .calendar-sync-box {
+      background: var(--bg-soft);
+      border: 1px solid var(--beige-200);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     /* --- DEDICATED MOBILE VIEW MODE & SMALL SCREEN OPTIMIZATIONS --- */
@@ -895,7 +906,6 @@
       grid-template-columns: 1fr;
     }
 
-    /* Card-style tables in Mobile View so text never cuts off */
     body.mobile-view .data-table-wrap table,
     body.mobile-view .data-table-wrap thead,
     body.mobile-view .data-table-wrap tbody,
@@ -934,7 +944,7 @@
     body.mobile-view .data-table-wrap td.mobile-actions-cell {
       margin-top: 8px;
       padding-top: 8px;
-      border-top: 1px dashed var(--pink-200);
+      border-top: 1px dashed var(--beige-200);
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -982,7 +992,7 @@
 </head>
 <body>
   <div class="app-shell">
-    <!-- Hero Header with Delicate Pink Botanical & Salon SVG Illustration -->
+    <!-- Hero Header with Soft Beige Botanical SVG Illustration -->
     <header class="hero-header">
       <div class="hero-content">
         <div class="hero-badge">Kozmetika &amp; Fodrászat</div>
@@ -996,16 +1006,16 @@
         </button>
       </div>
       <svg class="hero-art" viewBox="0 0 260 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="195" cy="70" r="68" fill="#F4C7D8" fill-opacity="0.45"/>
-        <circle cx="145" cy="125" r="46" fill="#F9DCE7" fill-opacity="0.7"/>
-        <path d="M180 155C182 110 202 72 238 42" stroke="#C56288" stroke-width="2" stroke-linecap="round"/>
-        <path d="M196 108C214 102 228 106 234 116C220 120 206 118 196 108Z" fill="#E7ADC3"/>
-        <path d="M206 82C190 70 184 56 188 44C198 54 205 66 206 82Z" fill="#D982A3" fill-opacity="0.75"/>
-        <path d="M187 128C168 122 156 110 156 96C170 102 181 113 187 128Z" fill="#E7ADC3"/>
-        <circle cx="238" cy="40" r="9" fill="#D982A3"/>
-        <circle cx="238" cy="40" r="4" fill="#FFF6F9"/>
-        <circle cx="164" cy="54" r="5" fill="#E7ADC3"/>
-        <circle cx="222" cy="138" r="6" fill="#D982A3" fill-opacity="0.5"/>
+        <circle cx="195" cy="70" r="68" fill="#E6D6C3" fill-opacity="0.48"/>
+        <circle cx="145" cy="125" r="46" fill="#EFE4D6" fill-opacity="0.72"/>
+        <path d="M180 155C182 110 202 72 238 42" stroke="#9F7F5C" stroke-width="2" stroke-linecap="round"/>
+        <path d="M196 108C214 102 228 106 234 116C220 120 206 118 196 108Z" fill="#D4BFA4"/>
+        <path d="M206 82C190 70 184 56 188 44C198 54 205 66 206 82Z" fill="#BC9F7E" fill-opacity="0.78"/>
+        <path d="M187 128C168 122 156 110 156 96C170 102 181 113 187 128Z" fill="#D4BFA4"/>
+        <circle cx="238" cy="40" r="9" fill="#BC9F7E"/>
+        <circle cx="238" cy="40" r="4" fill="#FCF9F5"/>
+        <circle cx="164" cy="54" r="5" fill="#D4BFA4"/>
+        <circle cx="222" cy="138" r="6" fill="#BC9F7E" fill-opacity="0.5"/>
       </svg>
     </header>
 
@@ -1294,8 +1304,8 @@
               <input type="text" id="cli-name" placeholder="pl. Nagy Eszter" required />
             </div>
             <div class="form-group">
-              <label for="cli-phone">Telefonszám *</label>
-              <input type="tel" id="cli-phone" placeholder="pl. +36 30 123 4567" required />
+              <label for="cli-phone">Telefonszám (opcionális)</label>
+              <input type="tel" id="cli-phone" placeholder="pl. +36 30 123 4567" />
             </div>
             <div class="form-group">
               <label for="cli-note">Megjegyzés (opcionális)</label>
@@ -1367,8 +1377,8 @@
             <input type="text" id="appt-client-name" placeholder="pl. Kiss Anna" required />
           </div>
           <div class="form-group">
-            <label for="appt-client-phone">Telefonszám *</label>
-            <input type="tel" id="appt-client-phone" placeholder="pl. +36 20 987 6543" required />
+            <label for="appt-client-phone">Telefonszám (opcionális)</label>
+            <input type="tel" id="appt-client-phone" placeholder="pl. +36 20 987 6543" />
           </div>
           <div class="form-group">
             <label for="appt-date">Dátum *</label>
@@ -1384,15 +1394,29 @@
           </div>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div style="margin-bottom:12px;">
           <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.88rem; font-weight:600; cursor:pointer;">
-            <input type="checkbox" id="appt-save-client-chk" checked style="width:18px; height:18px; accent-color:var(--pink-500);" />
-            Vendég nevének és telefonszámának mentése későbbre
+            <input type="checkbox" id="appt-save-client-chk" checked style="width:18px; height:18px; accent-color:var(--beige-500);" />
+            Vendég adatainak mentése későbbre
           </label>
-          <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.88rem; font-weight:600; cursor:pointer; color:var(--pink-600);">
-            <input type="checkbox" id="appt-add-iphone-cal-chk" checked style="width:18px; height:18px; accent-color:var(--pink-500);" />
-            Megnyitás az iPhone Naptárban is mentés után
+        </div>
+
+        <div class="calendar-sync-box">
+          <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.88rem; font-weight:600; cursor:pointer; color:var(--beige-600);">
+            <input type="checkbox" id="appt-add-iphone-cal-chk" checked style="width:18px; height:18px; accent-color:var(--beige-500);" />
+            Mentés az iPhone Naptárba is
           </label>
+          <div class="form-group" id="appt-reminder-group">
+            <label for="appt-reminder">Értesítés az iPhone Naptárban (időpont előtt)</label>
+            <select id="appt-reminder">
+              <option value="none">Nincs értesítés</option>
+              <option value="15">15 perccel előtte</option>
+              <option value="30">30 perccel előtte</option>
+              <option value="60" selected>1 órával előtte</option>
+              <option value="120">2 órával előtte</option>
+              <option value="1440">1 nappal előtte</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group" style="margin-bottom:14px;">
@@ -1450,7 +1474,6 @@
       const IDB_STORE = 'keyval';
       const memoryFallback = {};
 
-      // Safe localStorage helpers
       const safeLocalGet = (key) => {
         try {
           return window.localStorage.getItem(key);
@@ -1469,7 +1492,6 @@
         }
       };
 
-      // IndexedDB mirror for permanent iPhone storage persistence
       const openIDB = () => {
         return new Promise((resolve) => {
           try {
@@ -1563,6 +1585,18 @@
         return addMinutesToTime(ap ? ap.time : '10:00', 60);
       };
 
+      const formatReminderLabel = (rem) => {
+        if (!rem || rem === 'none') return '';
+        const map = {
+          '15': '15 perccel előtte',
+          '30': '30 perccel előtte',
+          '60': '1 órával előtte',
+          '120': '2 órával előtte',
+          '1440': '1 nappal előtte'
+        };
+        return map[String(rem)] || `${rem} perccel előtte`;
+      };
+
       const formatFt = (num) => {
         return Number(num || 0).toLocaleString('hu-HU') + ' Ft';
       };
@@ -1650,6 +1684,20 @@
           .replace(/\r?\n/g, '\\n');
       };
 
+      const buildIcsTrigger = (reminderValue) => {
+        if (!reminderValue || reminderValue === 'none') return null;
+        const triggerMap = {
+          '15': '-PT15M',
+          '30': '-PT30M',
+          '60': '-PT1H',
+          '120': '-PT2H',
+          '1440': '-P1D'
+        };
+        if (triggerMap[String(reminderValue)]) return triggerMap[String(reminderValue)];
+        const mins = Number(reminderValue);
+        return (!isNaN(mins) && mins > 0) ? `-PT${mins}M` : null;
+      };
+
       const buildIcsContent = (apptsToExport) => {
         const nowStamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
         const lines = [
@@ -1688,7 +1736,7 @@
           const summary = `Vendég: ${ap.clientName}${srvNames.length ? ' - ' + srvNames.join(', ') : ''}`;
           const descLines = [
             `Vendég: ${ap.clientName}`,
-            `Telefon: ${ap.clientPhone}`,
+            ap.clientPhone ? `Telefon: ${ap.clientPhone}` : '',
             `Időpont: ${ap.time} - ${resolvedEnd}`,
             srvNames.length ? `Szolgáltatások: ${srvNames.join(', ')}` : '',
             `Végösszeg: ${formatFt(ap.totalPrice)}`,
@@ -1697,14 +1745,26 @@
 
           lines.push(
             'BEGIN:VEVENT',
-            `UID:${ap.id}@szalon-naplo.local`,
+            `UID:${ap.id}-${Date.now()}@szalon-naplo.local`,
             `DTSTAMP:${nowStamp}`,
             `DTSTART:${startStr}`,
             `DTEND:${endStr}`,
             `SUMMARY:${escapeIcsText(summary)}`,
-            `DESCRIPTION:${escapeIcsText(descLines)}`,
-            'END:VEVENT'
+            `DESCRIPTION:${escapeIcsText(descLines)}`
           );
+
+          const triggerStr = buildIcsTrigger(ap.reminderMinutes);
+          if (triggerStr) {
+            lines.push(
+              'BEGIN:VALARM',
+              `TRIGGER:${triggerStr}`,
+              'ACTION:DISPLAY',
+              `DESCRIPTION:${escapeIcsText('Emlékeztető: ' + summary)}`,
+              'END:VALARM'
+            );
+          }
+
+          lines.push('END:VEVENT');
         });
 
         lines.push('END:VCALENDAR');
@@ -1714,23 +1774,34 @@
       const openInIphoneCalendar = (apptsToExport, filename = 'idopont.ics') => {
         if (!apptsToExport || apptsToExport.length === 0) return;
         const icsText = buildIcsContent(apptsToExport);
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
 
-        if (isIOS) {
-          const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsText);
-          window.location.href = dataUri;
+        const isStandalone = window.navigator.standalone === true ||
+          window.matchMedia('(display-mode: standalone)').matches;
+
+        if (isStandalone) {
+          const win = window.open(url, '_blank');
+          if (!win) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
         } else {
-          const blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
           a.download = filename;
+          a.style.display = 'none';
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-          setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
+
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
       };
 
       window.syncSingleAppointmentToCalendar = (apptId) => {
@@ -1873,6 +1944,7 @@
 
         listEl.innerHTML = dayAppts.map((ap) => {
           const endT = getAppointmentEndTime(ap);
+          const reminderText = formatReminderLabel(ap.reminderMinutes);
           const srvNames = (ap.serviceIds || []).map((sid) => {
             const found = services.find((s) => s.id === sid);
             return found ? `${found.name} (${formatFt(found.price)})` : 'Szolgáltatás';
@@ -1887,9 +1959,7 @@
                 <div>
                   <span class="appt-time">${escapeHtml(ap.time)} - ${escapeHtml(endT)}</span>
                   <span class="appt-client">${escapeHtml(ap.clientName)}</span>
-                  <div style="margin-top:3px;">
-                    <a class="appt-phone" href="tel:${escapeHtml(ap.clientPhone)}">${escapeHtml(ap.clientPhone)}</a>
-                  </div>
+                  ${ap.clientPhone ? `<div style="margin-top:3px;"><a class="appt-phone" href="tel:${escapeHtml(ap.clientPhone)}">${escapeHtml(ap.clientPhone)}</a></div>` : ''}
                 </div>
                 <div class="appt-actions">
                   <button type="button" class="btn btn-soft btn-sm" onclick="syncSingleAppointmentToCalendar('${ap.id}')">iPhone Naptárba</button>
@@ -1897,6 +1967,7 @@
                 </div>
               </div>
               <div class="tag-row">${tagsHtml}</div>
+              ${reminderText ? `<div style="font-size:0.81rem; color:var(--beige-600); font-weight:600;">Naptár értesítés: ${escapeHtml(reminderText)}</div>` : ''}
               ${ap.note ? `<div style="font-size:0.83rem; color:var(--text-muted);">Megjegyzés: ${escapeHtml(ap.note)}</div>` : ''}
               <div class="appt-bottom">
                 <span style="color:var(--text-muted); font-size:0.83rem;">Fizetendő összeg:</span>
@@ -1943,6 +2014,8 @@
       const apptModal = document.getElementById('appt-modal');
       const apptTimeInput = document.getElementById('appt-time');
       const apptEndTimeInput = document.getElementById('appt-end-time');
+      const apptAddCalChk = document.getElementById('appt-add-iphone-cal-chk');
+      const apptReminderSelect = document.getElementById('appt-reminder');
       let endTimeManuallyEdited = false;
 
       apptEndTimeInput.addEventListener('input', () => {
@@ -1955,6 +2028,10 @@
         }
       });
 
+      apptAddCalChk.addEventListener('change', () => {
+        apptReminderSelect.disabled = !apptAddCalChk.checked;
+      });
+
       const openAppointmentModal = (prefillDate, preselectedServiceIds = [], prefillClientId = '') => {
         document.getElementById('appt-date').value = prefillDate || selectedDate || todayStr();
         apptTimeInput.value = '10:00';
@@ -1962,17 +2039,22 @@
         endTimeManuallyEdited = false;
         document.getElementById('appt-note').value = '';
         document.getElementById('appt-save-client-chk').checked = true;
-        document.getElementById('appt-add-iphone-cal-chk').checked = true;
+        apptAddCalChk.checked = true;
+        apptReminderSelect.disabled = false;
+        apptReminderSelect.value = '60';
 
         const selectEl = document.getElementById('appt-saved-client');
         selectEl.innerHTML = `<option value="">-- Új vendég adatainak megadása --</option>` +
-          clients.map((c) => `<option value="${c.id}">${escapeHtml(c.name)} (${escapeHtml(c.phone)})</option>`).join('');
+          clients.map((c) => {
+            const label = c.phone ? `${c.name} (${c.phone})` : c.name;
+            return `<option value="${c.id}">${escapeHtml(label)}</option>`;
+          }).join('');
 
         if (prefillClientId) {
           selectEl.value = prefillClientId;
           const cli = clients.find((c) => c.id === prefillClientId);
           document.getElementById('appt-client-name').value = cli ? cli.name : '';
-          document.getElementById('appt-client-phone').value = cli ? cli.phone : '';
+          document.getElementById('appt-client-phone').value = cli ? (cli.phone || '') : '';
         } else {
           selectEl.value = '';
           document.getElementById('appt-client-name').value = '';
@@ -2031,7 +2113,7 @@
         const cli = clients.find((c) => c.id === cid);
         if (cli) {
           document.getElementById('appt-client-name').value = cli.name;
-          document.getElementById('appt-client-phone').value = cli.phone;
+          document.getElementById('appt-client-phone').value = cli.phone || '';
         }
       });
 
@@ -2044,7 +2126,8 @@
         const endTime = apptEndTimeInput.value;
         const note = document.getElementById('appt-note').value.trim();
         const shouldSaveClient = document.getElementById('appt-save-client-chk').checked;
-        const shouldAddIphoneCal = document.getElementById('appt-add-iphone-cal-chk').checked;
+        const shouldAddIphoneCal = apptAddCalChk.checked;
+        const reminderMinutes = shouldAddIphoneCal ? apptReminderSelect.value : 'none';
         let selectedClientId = document.getElementById('appt-saved-client').value;
 
         if (endTime <= time) {
@@ -2060,13 +2143,14 @@
           totalPrice += Number(chk.dataset.price || 0);
         });
 
-        if (shouldSaveClient && name && phone) {
+        if (shouldSaveClient && name) {
           const existing = clients.find(
-            (c) => c.id === selectedClientId || (c.name.toLowerCase() === name.toLowerCase() && c.phone === phone)
+            (c) => c.id === selectedClientId ||
+              (c.name.toLowerCase() === name.toLowerCase() && (c.phone || '') === phone)
           );
           if (existing) {
             existing.name = name;
-            existing.phone = phone;
+            if (phone) existing.phone = phone;
             selectedClientId = existing.id;
           } else {
             const newCli = { id: uid(), name, phone, note: '' };
@@ -2084,6 +2168,7 @@
           date,
           time,
           endTime,
+          reminderMinutes,
           serviceIds: checkedIds,
           totalPrice,
           note
@@ -2101,9 +2186,7 @@
         switchView('calendar-view');
 
         if (shouldAddIphoneCal) {
-          setTimeout(() => {
-            openInIphoneCalendar([newAppt], `idopont-${newAppt.date}.ics`);
-          }, 120);
+          openInIphoneCalendar([newAppt], `idopont-${newAppt.date}.ics`);
         }
       });
 
@@ -2259,13 +2342,12 @@
                 <div style="font-size:0.82rem; font-weight:600; color:var(--text-muted);">${pct}%</div>
                 <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
               </td>
-              <td data-label="Bevétel" style="text-align:right; font-weight:700; color:var(--pink-600);">${formatFt(item.revenue)}</td>
+              <td data-label="Bevétel" style="text-align:right; font-weight:700; color:var(--beige-600);">${formatFt(item.revenue)}</td>
             </tr>
           `;
         }).join('');
       };
 
-      // Initialize default 30-day range
       applyStatsPreset('30d');
 
       // --- 3. CALCULATOR VIEW ---
@@ -2347,7 +2429,7 @@
           <tr>
             <td style="font-weight:700;">${escapeHtml(s.name)}</td>
             <td data-label="Kategória"><span class="badge badge-cat">${escapeHtml(s.category)}</span></td>
-            <td data-label="Ár" style="font-weight:700; color:var(--pink-600);">${formatFt(s.price)}</td>
+            <td data-label="Ár" style="font-weight:700; color:var(--beige-600);">${formatFt(s.price)}</td>
             <td class="mobile-actions-cell" style="text-align:right; white-space:nowrap;">
               <button type="button" class="btn btn-soft btn-sm" onclick="editServicePrice('${s.id}')">Ár módosítása</button>
               <button type="button" class="btn btn-danger-soft" onclick="deleteService('${s.id}')">Törlés</button>
@@ -2448,7 +2530,7 @@
                 <div style="font-weight:700;">${escapeHtml(m.name)}</div>
                 <div style="font-size:0.82rem; color:var(--text-muted);">${escapeHtml(m.type)}</div>
               </td>
-              <td data-label="Ár" style="font-weight:700; color:var(--pink-600);">${formatFt(m.price)}</td>
+              <td data-label="Ár" style="font-weight:700; color:var(--beige-600);">${formatFt(m.price)}</td>
               <td data-label="Vásárlás">${formatDateHu(m.boughtDate)}</td>
               <td data-label="Elfogyott">${isFinished ? formatDateHu(m.finishedDate) : '-'}</td>
               <td data-label="Tartósság">${durationText}</td>
@@ -2549,7 +2631,7 @@
         const tbody = document.getElementById('clients-table-body');
         const q = (document.getElementById('client-search').value || '').toLowerCase().trim();
         const filtered = clients.filter((c) =>
-          c.name.toLowerCase().includes(q) || c.phone.toLowerCase().includes(q)
+          c.name.toLowerCase().includes(q) || (c.phone || '').toLowerCase().includes(q)
         );
 
         if (filtered.length === 0) {
@@ -2559,10 +2641,13 @@
 
         tbody.innerHTML = filtered.map((c) => {
           const count = appointments.filter((a) => a.clientId === c.id || a.clientName === c.name).length;
+          const phoneCell = c.phone
+            ? `<a class="appt-phone" href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a>`
+            : `<span style="color:var(--text-muted);">-</span>`;
           return `
             <tr>
               <td style="font-weight:700;">${escapeHtml(c.name)}</td>
-              <td data-label="Telefon"><a class="appt-phone" href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a></td>
+              <td data-label="Telefon">${phoneCell}</td>
               <td data-label="Megjegyzés" style="color:var(--text-muted);">${escapeHtml(c.note || '-')}</td>
               <td data-label="Időpontok"><span class="badge badge-cat">${count} alkalom</span></td>
               <td class="mobile-actions-cell" style="text-align:right; white-space:nowrap;">
@@ -2581,7 +2666,7 @@
         const name = document.getElementById('cli-name').value.trim();
         const phone = document.getElementById('cli-phone').value.trim();
         const note = document.getElementById('cli-note').value.trim();
-        if (!name || !phone) return;
+        if (!name) return;
 
         clients.push({ id: uid(), name, phone, note });
         save(STORAGE_KEYS.clients, clients);
