@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Szalon Napló — Kozmetika & Fodrászat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-main: #fdf7f9;
+      --bg-soft: #fbeff3;
+      --bg-card: #ffffff;
+      --pink-100: #fae6ed;
+      --pink-200: #f3cddb;
+      --pink-300: #e7adc3;
+      --pink-400: #d982a3;
+      --pink-500: #c56288;
+      --pink-600: #a8496e;
+      --text-main: #3b262e;
+      --text-muted: #7f616d;
+      --border: #f1d8e1;
+      --success-bg: #eaf6ef;
+      --success-text: #2e6f51;
+      --done-bg: #f3e8ec;
+      --done-text: #865668;
+      --shadow-sm: 0 4px 14px rgba(197, 98, 136, 0.08);
+      --shadow-md: 0 10px 28px rgba(197, 98, 136, 0.13);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 8% 10%, rgba(243, 205, 219, 0.42) 0%, transparent 32%),
+        radial-gradient(circle at 92% 85%, rgba(243, 205, 219, 0.35) 0%, transparent 36%);
+    }
+
+    h1, h2, h3, .serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .app-shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 20px 18px 48px;
+    }
+
+    /* Header Banner with Soft Pink Floral SVG Graphics */
+    .hero-header {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff6f9 0%, #fae4ec 55%, #f5d3e0 100%);
+      border: 1px solid var(--pink-200);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--pink-600);
+      border: 1px solid var(--pink-200);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-header h1 {
+      font-size: 1.85rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .hero-header p {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+    }
+
+    .hero-art {
+      position: absolute;
+      right: -10px;
+      top: -12px;
+      width: 240px;
+      height: 160px;
+      pointer-events: none;
+      opacity: 0.92;
+    }
+
+    /* Navigation Tabs */
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 8px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 22px;
+    }
+
+    .nav-btn {
+      flex: 1 1 auto;
+      min-width: 135px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 16px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-soft);
+      color: var(--pink-600);
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(197, 98, 136, 0.28);
+    }
+
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Views */
+    .view-section {
+      display: none;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Layout Grids */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      color: var(--text-main);
+    }
+
+    .calendar-layout {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .calendar-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(197, 98, 136, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+      transform: translateY(-1px);
+    }
+
+    .btn
