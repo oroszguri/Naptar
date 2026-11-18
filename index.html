@@ -1,8 +1,3 @@
-A fehér képernyőt az okozta, hogy az előnézeti vagy korlátozott böngészőkörnyezetben a helyi tárhely elérése hibát dobott, illetve iPhone-on a fájlnézegetőből megnyitva nem fut le a programkód. Az alábbi verzió már **hibatűrő kettős mentést (`localStorage` + `IndexedDB`)** használ — így a böngésző bezárása után is megőrzi az összes adatot az eszközön —, tartalmazza az **iPhone Naptárba mentés** funkciót, valamint a megadott szolgáltatásokat és árakat.
-
-Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, kapcsold be a **Settings -> Pages** menüben, majd nyisd meg a kapott `github.io` linket iPhone Safariban (a Megosztás -> **Főképernyőhöz adás** gombbal önálló alkalmazásként is kirakhatod a kezdőképernyőre).
-
-```html
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -51,6 +46,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       color: var(--text-main);
       line-height: 1.5;
       min-height: 100vh;
+      overflow-x: hidden;
       background-image:
         radial-gradient(circle at 8% 10%, rgba(243, 205, 219, 0.45) 0%, transparent 34%),
         radial-gradient(circle at 92% 85%, rgba(243, 205, 219, 0.38) 0%, transparent 38%);
@@ -59,12 +55,14 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     h1, h2, h3 {
       font-family: Georgia, "Times New Roman", serif;
       font-weight: 700;
+      overflow-wrap: break-word;
     }
 
     .app-shell {
       max-width: 1200px;
       margin: 0 auto;
       padding: 18px 16px 56px;
+      transition: max-width 0.2s ease;
     }
 
     /* Header Banner with Soft Pink Floral SVG Graphics */
@@ -78,14 +76,51 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       margin-bottom: 18px;
       box-shadow: var(--shadow-sm);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      gap: 16px;
+      flex-wrap: wrap;
+      gap: 14px;
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
+      max-width: 720px;
+    }
+
+    .hero-top-actions {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .view-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--pink-600);
+      border: 1px solid var(--pink-300);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(197, 98, 136, 0.12);
+    }
+
+    .view-toggle-btn:hover {
+      background: #ffffff;
+      border-color: var(--pink-500);
+    }
+
+    .view-toggle-btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
     }
 
     .hero-badge {
@@ -112,6 +147,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     .hero-header p {
       color: var(--text-muted);
       font-size: 0.92rem;
+      overflow-wrap: break-word;
     }
 
     .hero-art {
@@ -139,21 +175,23 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
 
     .nav-btn {
       flex: 1 1 auto;
-      min-width: 130px;
+      min-width: 120px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 11px 14px;
+      gap: 7px;
+      padding: 11px 12px;
       border: none;
       border-radius: var(--radius-md);
       background: transparent;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.18s ease;
+      text-align: center;
+      line-height: 1.25;
     }
 
     .nav-btn:hover {
@@ -168,8 +206,8 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     }
 
     .nav-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       flex-shrink: 0;
     }
 
@@ -189,6 +227,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       border-radius: var(--radius-lg);
       padding: 20px;
       box-shadow: var(--shadow-sm);
+      min-width: 0;
     }
 
     .card-header {
@@ -196,7 +235,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 16px;
     }
 
@@ -233,6 +272,8 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       cursor: pointer;
       transition: all 0.16s ease;
       text-decoration: none;
+      line-height: 1.25;
+      text-align: center;
     }
 
     .btn-primary {
@@ -288,16 +329,16 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
 
     .cal-month-label {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       font-weight: 700;
-      min-width: 155px;
+      min-width: 145px;
       text-align: center;
       text-transform: capitalize;
     }
 
     .cal-weekdays {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 5px;
       margin-bottom: 8px;
       text-align: center;
@@ -309,12 +350,13 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
 
     .cal-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 5px;
     }
 
     .cal-day {
       min-height: 80px;
+      min-width: 0;
       background: var(--bg-main);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
@@ -353,15 +395,17 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 2px;
     }
 
     .cal-count-pill {
       background: var(--pink-500);
       color: #ffffff;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 1px 6px;
+      padding: 1px 5px;
       border-radius: 999px;
+      line-height: 1.2;
     }
 
     .cal-mini-list {
@@ -400,6 +444,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       display: flex;
       flex-direction: column;
       gap: 9px;
+      overflow-wrap: break-word;
     }
 
     .appt-top {
@@ -422,15 +467,17 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       background: var(--pink-500);
       color: #ffffff;
       font-weight: 700;
-      font-size: 0.81rem;
+      font-size: 0.8rem;
       padding: 2px 9px;
       border-radius: 999px;
       margin-right: 6px;
+      margin-bottom: 3px;
     }
 
     .appt-client {
       font-weight: 700;
       font-size: 1rem;
+      overflow-wrap: break-word;
     }
 
     .appt-phone {
@@ -454,12 +501,15 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       padding: 3px 9px;
       border-radius: 999px;
       font-weight: 500;
+      overflow-wrap: break-word;
     }
 
     .appt-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
       padding-top: 7px;
       border-top: 1px dashed var(--pink-200);
       font-size: 0.9rem;
@@ -474,7 +524,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     /* Forms & Inputs */
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 14px;
       margin-bottom: 14px;
     }
@@ -483,6 +533,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       display: flex;
       flex-direction: column;
       gap: 6px;
+      min-width: 0;
     }
 
     .form-group label {
@@ -499,6 +550,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     select,
     textarea {
       width: 100%;
+      max-width: 100%;
       padding: 10px 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--pink-200);
@@ -517,7 +569,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     /* Checklist Boxes */
     .checklist-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 10px;
     }
 
@@ -532,6 +584,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       background: var(--bg-main);
       cursor: pointer;
       user-select: none;
+      min-width: 0;
     }
 
     .check-card.checked {
@@ -543,6 +596,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
     }
 
     .check-left input[type="checkbox"] {
@@ -550,11 +604,13 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       height: 19px;
       accent-color: var(--pink-500);
       cursor: pointer;
+      flex-shrink: 0;
     }
 
     .check-name {
       font-weight: 600;
       font-size: 0.9rem;
+      overflow-wrap: break-word;
     }
 
     .check-cat {
@@ -568,6 +624,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       color: var(--pink-600);
       font-size: 0.9rem;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* Total Summary Bar */
@@ -617,6 +674,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       padding: 11px 12px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
+      overflow-wrap: break-word;
     }
 
     .badge {
@@ -640,6 +698,23 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
     .badge-cat {
       background: var(--pink-100);
       color: var(--pink-600);
+    }
+
+    /* Progress bar for statistics */
+    .progress-track {
+      width: 100%;
+      min-width: 70px;
+      height: 8px;
+      background: var(--pink-100);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pink-400), var(--pink-500));
+      border-radius: 999px;
     }
 
     /* Modal */
@@ -666,7 +741,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 22px;
+      padding: 20px;
       box-shadow: var(--shadow-md);
     }
 
@@ -707,6 +782,12 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       margin-top: 2px;
     }
 
+    .stat-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
     .storage-pill {
       display: inline-flex;
       align-items: center;
@@ -732,19 +813,169 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       color: var(--text-muted);
     }
 
-    @media (max-width: 600px) {
+    /* --- DEDICATED MOBILE VIEW MODE & SMALL SCREEN OPTIMIZATIONS --- */
+    body.mobile-view .app-shell {
+      max-width: 480px;
+      padding: 12px 12px 48px;
+    }
+
+    body.mobile-view .hero-header {
+      padding: 16px;
+    }
+
+    body.mobile-view .hero-header h1 {
+      font-size: 1.35rem;
+    }
+
+    body.mobile-view .hero-header p {
+      font-size: 0.85rem;
+    }
+
+    body.mobile-view .nav-bar {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      padding: 6px;
+    }
+
+    body.mobile-view .nav-btn {
+      min-width: 0;
+      padding: 10px 8px;
+      font-size: 0.81rem;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    body.mobile-view .calendar-layout {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    body.mobile-view .card {
+      padding: 15px;
+      border-radius: 16px;
+    }
+
+    body.mobile-view .card-title {
+      font-size: 1.12rem;
+    }
+
+    body.mobile-view .cal-month-label {
+      min-width: 120px;
+      font-size: 1.02rem;
+    }
+
+    body.mobile-view .cal-weekdays {
+      gap: 3px;
+      font-size: 0.7rem;
+    }
+
+    body.mobile-view .cal-grid {
+      gap: 3px;
+    }
+
+    body.mobile-view .cal-day {
+      min-height: 52px;
+      padding: 4px 3px;
+    }
+
+    body.mobile-view .cal-day-num {
+      font-size: 0.78rem;
+    }
+
+    body.mobile-view .cal-mini-item {
+      display: none;
+    }
+
+    body.mobile-view .checklist-grid {
+      grid-template-columns: 1fr;
+    }
+
+    body.mobile-view .stats-row {
+      grid-template-columns: 1fr;
+    }
+
+    /* Card-style tables in Mobile View so text never cuts off */
+    body.mobile-view .data-table-wrap table,
+    body.mobile-view .data-table-wrap thead,
+    body.mobile-view .data-table-wrap tbody,
+    body.mobile-view .data-table-wrap tr,
+    body.mobile-view .data-table-wrap td {
+      display: block;
+      width: 100%;
+    }
+
+    body.mobile-view .data-table-wrap thead {
+      display: none;
+    }
+
+    body.mobile-view .data-table-wrap tr {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    body.mobile-view .data-table-wrap td {
+      border-bottom: none;
+      padding: 4px 0;
+      text-align: left !important;
+      white-space: normal !important;
+    }
+
+    body.mobile-view .data-table-wrap td[data-label]::before {
+      content: attr(data-label) ": ";
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    body.mobile-view .data-table-wrap td.mobile-actions-cell {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--pink-200);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    body.mobile-view .total-banner {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
       .hero-header {
         padding: 16px;
       }
       .hero-header h1 {
         font-size: 1.38rem;
       }
+      .cal-month-label {
+        min-width: 122px;
+        font-size: 1.05rem;
+      }
+      .cal-weekdays, .cal-grid {
+        gap: 3px;
+      }
       .cal-day {
-        min-height: 60px;
+        min-height: 54px;
         padding: 4px;
       }
       .cal-mini-item {
         display: none;
+      }
+      .nav-bar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+      .nav-btn {
+        min-width: 0;
+        padding: 10px 8px;
+        font-size: 0.82rem;
       }
     }
   </style>
@@ -756,7 +987,13 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       <div class="hero-content">
         <div class="hero-badge">Kozmetika &amp; Fodrászat</div>
         <h1>Szépségszalon Határidőnapló</h1>
-        <p>Időpontok, iPhone Naptár szinkron, vendéglista, árkalkulátor és anyagfogyás egy helyen.</p>
+        <p>Időpontok, iPhone Naptár szinkron, vendéglista, árkalkulátor, összesítés és anyagfogyás.</p>
+      </div>
+      <div class="hero-top-actions">
+        <button type="button" class="view-toggle-btn" id="view-mode-toggle-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <span id="view-mode-toggle-text">Telefonos nézet</span>
+        </button>
       </div>
       <svg class="hero-art" viewBox="0 0 260 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="195" cy="70" r="68" fill="#F4C7D8" fill-opacity="0.45"/>
@@ -777,6 +1014,10 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       <button type="button" class="nav-btn active" data-view="calendar-view">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Naptár &amp; Időpontok
+      </button>
+      <button type="button" class="nav-btn" data-view="stats-view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Összesítés
       </button>
       <button type="button" class="nav-btn" data-view="calculator-view">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="14" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="16" y2="15"/><line x1="8" y1="19" x2="16" y2="19"/></svg>
@@ -806,7 +1047,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
               <div class="cal-month-label" id="cal-month-label">Naptár</div>
               <button type="button" class="btn btn-soft btn-sm" id="next-month-btn" title="Következő hónap">&gt;</button>
             </div>
-            <div style="display:flex; gap:8px;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <button type="button" class="btn btn-outline btn-sm" id="today-btn">Ma</button>
               <button type="button" class="btn btn-primary btn-sm" id="open-appt-modal-btn">+ Új időpont</button>
             </div>
@@ -837,7 +1078,63 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       </div>
     </section>
 
-    <!-- 2. CALCULATOR VIEW -->
+    <!-- 2. SUMMARY / STATISTICS VIEW -->
+    <section id="stats-view" class="view-section">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Időszaki Összesítés</h2>
+            <p style="font-size:0.86rem; color:var(--text-muted);" id="stats-period-label">Időszak: Elmúlt 30 nap</p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;">
+          <button type="button" class="btn btn-soft btn-sm stats-preset-btn active" data-preset="30d">Elmúlt 30 nap</button>
+          <button type="button" class="btn btn-outline btn-sm stats-preset-btn" data-preset="7d">Elmúlt 7 nap</button>
+          <button type="button" class="btn btn-outline btn-sm stats-preset-btn" data-preset="this-month">Ez a hónap</button>
+          <button type="button" class="btn btn-outline btn-sm stats-preset-btn" data-preset="last-month">Előző hónap</button>
+          <button type="button" class="btn btn-outline btn-sm stats-preset-btn" data-preset="all">Összes</button>
+        </div>
+
+        <div class="form-grid" style="max-width:480px; margin-bottom:18px;">
+          <div class="form-group">
+            <label for="stats-from-date">Időszak kezdete</label>
+            <input type="date" id="stats-from-date" />
+          </div>
+          <div class="form-group">
+            <label for="stats-to-date">Időszak vége</label>
+            <input type="date" id="stats-to-date" />
+          </div>
+        </div>
+
+        <div class="stats-row" id="stats-kpi-row"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Miből mennyit kértek</h2>
+            <p style="font-size:0.86rem; color:var(--text-muted);">Szolgáltatások szerinti bontás a kiválasztott időszakban</p>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Szolgáltatás</th>
+                <th>Kért mennyiség</th>
+                <th>Arány</th>
+                <th style="text-align:right;">Bevétel</th>
+              </tr>
+            </thead>
+            <tbody id="stats-services-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. CALCULATOR VIEW -->
     <section id="calculator-view" class="view-section">
       <div class="card">
         <div class="card-header">
@@ -871,7 +1168,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       </div>
     </section>
 
-    <!-- 3. SERVICES & PRICES VIEW -->
+    <!-- 4. SERVICES & PRICES VIEW -->
     <section id="services-view" class="view-section">
       <div class="card" style="margin-bottom:20px;">
         <div class="card-header">
@@ -921,7 +1218,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       </div>
     </section>
 
-    <!-- 4. MATERIALS / INVENTORY VIEW -->
+    <!-- 5. MATERIALS / INVENTORY VIEW -->
     <section id="materials-view" class="view-section">
       <div class="card" style="margin-bottom:20px;">
         <div class="card-header">
@@ -984,7 +1281,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
       </div>
     </section>
 
-    <!-- 5. SAVED CLIENTS VIEW -->
+    <!-- 6. SAVED CLIENTS VIEW -->
     <section id="clients-view" class="view-section">
       <div class="card" style="margin-bottom:20px;">
         <div class="card-header">
@@ -1078,8 +1375,12 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
             <input type="date" id="appt-date" required />
           </div>
           <div class="form-group">
-            <label for="appt-time">Időpont *</label>
+            <label for="appt-time">Kezdés (mikortól) *</label>
             <input type="time" id="appt-time" value="10:00" required />
+          </div>
+          <div class="form-group">
+            <label for="appt-end-time">Befejezés (meddig) *</label>
+            <input type="time" id="appt-end-time" value="11:00" required />
           </div>
         </div>
 
@@ -1141,14 +1442,15 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         clients: 'szalon_clients_v2',
         appointments: 'szalon_appointments_v2',
         materials: 'szalon_materials_v2',
-        initialized: 'szalon_initialized_v2'
+        initialized: 'szalon_initialized_v2',
+        viewMode: 'szalon_view_mode_v2'
       };
 
       const IDB_NAME = 'SzalonNaploPersistentDB';
       const IDB_STORE = 'keyval';
       const memoryFallback = {};
 
-      // Safe localStorage helpers (never throw in restricted contexts)
+      // Safe localStorage helpers
       const safeLocalGet = (key) => {
         try {
           return window.localStorage.getItem(key);
@@ -1211,17 +1513,54 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         });
       };
 
-      // Request persistent storage on iOS/mobile browsers
       if (navigator.storage && navigator.storage.persist) {
         try { navigator.storage.persist(); } catch (e) {}
       }
 
-      const todayStr = () => {
-        const d = new Date();
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
+      // --- VIEW MODE (MOBILE / DESKTOP) TOGGLE ---
+      const viewToggleBtn = document.getElementById('view-mode-toggle-btn');
+      const viewToggleText = document.getElementById('view-mode-toggle-text');
+
+      const applyViewMode = (mode) => {
+        const isMobileMode = mode === 'mobile';
+        document.body.classList.toggle('mobile-view', isMobileMode);
+        viewToggleText.textContent = isMobileMode ? 'Asztali nézet' : 'Telefonos nézet';
+      };
+
+      const savedViewMode = safeLocalGet(STORAGE_KEYS.viewMode);
+      const initialViewMode = savedViewMode || (window.innerWidth <= 680 ? 'mobile' : 'desktop');
+      applyViewMode(initialViewMode);
+
+      viewToggleBtn.addEventListener('click', () => {
+        const nextMode = document.body.classList.contains('mobile-view') ? 'desktop' : 'mobile';
+        safeLocalSet(STORAGE_KEYS.viewMode, nextMode);
+        applyViewMode(nextMode);
+      });
+
+      const formatIsoDate = (dateObj) => {
+        const y = dateObj.getFullYear();
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
         return `${y}-${m}-${day}`;
+      };
+
+      const todayStr = () => formatIsoDate(new Date());
+
+      const addMinutesToTime = (timeStr, minsToAdd) => {
+        const parts = String(timeStr || '10:00').split(':');
+        const h = Number(parts[0] || 10);
+        const m = Number(parts[1] || 0);
+        const total = Math.min(23 * 60 + 59, Math.max(0, h * 60 + m + minsToAdd));
+        const nh = Math.floor(total / 60);
+        const nm = total % 60;
+        return `${String(nh).padStart(2, '0')}:${String(nm).padStart(2, '0')}`;
+      };
+
+      const getAppointmentEndTime = (ap) => {
+        if (ap && ap.endTime && /^\d{2}:\d{2}$/.test(ap.endTime)) {
+          return ap.endTime;
+        }
+        return addMinutesToTime(ap ? ap.time : '10:00', 60);
       };
 
       const formatFt = (num) => {
@@ -1261,7 +1600,6 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         idbSet(key, value);
       };
 
-      // Default services requested by user
       const getDefaultServices = () => [
         { id: 'srv_szempilla', name: 'Szempilla festés', category: 'Szemöldök & Szempilla', price: 1500 },
         { id: 'srv_szemoldok_f', name: 'Szemöldök festés', category: 'Szemöldök & Szempilla', price: 1000 },
@@ -1324,24 +1662,23 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
 
         apptsToExport.forEach((ap) => {
           const datePart = (ap.date || todayStr()).replace(/-/g, '');
-          const timeParts = (ap.time || '10:00').split(':');
-          const startHour = Number(timeParts[0] || 10);
-          const startMin = Number(timeParts[1] || 0);
+          const startParts = (ap.time || '10:00').split(':');
+          const startHour = Number(startParts[0] || 10);
+          const startMin = Number(startParts[1] || 0);
 
-          // Default 60 minutes duration
-          const totalMins = startHour * 60 + startMin + 60;
-          const endHour = Math.floor(totalMins / 60) % 24;
-          const endMin = totalMins % 60;
-          const endDatePart = totalMins >= 24 * 60
-            ? (() => {
-                const d = new Date(ap.date + 'T00:00:00');
-                d.setDate(d.getDate() + 1);
-                return d.toISOString().slice(0, 10).replace(/-/g, '');
-              })()
-            : datePart;
+          const resolvedEnd = getAppointmentEndTime(ap);
+          const endParts = resolvedEnd.split(':');
+          let endHour = Number(endParts[0] || 11);
+          let endMin = Number(endParts[1] || 0);
+
+          if (endHour * 60 + endMin <= startHour * 60 + startMin) {
+            const fallbackEnd = addMinutesToTime(ap.time, 60).split(':');
+            endHour = Number(fallbackEnd[0]);
+            endMin = Number(fallbackEnd[1]);
+          }
 
           const startStr = `${datePart}T${String(startHour).padStart(2, '0')}${String(startMin).padStart(2, '0')}00`;
-          const endStr = `${endDatePart}T${String(endHour).padStart(2, '0')}${String(endMin).padStart(2, '0')}00`;
+          const endStr = `${datePart}T${String(endHour).padStart(2, '0')}${String(endMin).padStart(2, '0')}00`;
 
           const srvNames = (ap.serviceIds || []).map((sid) => {
             const found = services.find((s) => s.id === sid);
@@ -1352,6 +1689,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
           const descLines = [
             `Vendég: ${ap.clientName}`,
             `Telefon: ${ap.clientPhone}`,
+            `Időpont: ${ap.time} - ${resolvedEnd}`,
             srvNames.length ? `Szolgáltatások: ${srvNames.join(', ')}` : '',
             `Végösszeg: ${formatFt(ap.totalPrice)}`,
             ap.note ? `Megjegyzés: ${ap.note}` : ''
@@ -1380,7 +1718,6 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
         if (isIOS) {
-          // Navigating directly to text/calendar data URI triggers iOS Calendar native "Add Event" sheet
           const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsText);
           window.location.href = dataUri;
         } else {
@@ -1419,6 +1756,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         navButtons.forEach((b) => b.classList.toggle('active', b.dataset.view === viewId));
         viewSections.forEach((s) => s.classList.toggle('active', s.id === viewId));
         if (viewId === 'calendar-view') renderCalendar();
+        if (viewId === 'stats-view') renderStatsView();
         if (viewId === 'calculator-view') renderCalculator();
         if (viewId === 'services-view') renderServicesTable();
         if (viewId === 'materials-view') renderMaterialsTable();
@@ -1487,7 +1825,8 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
 
           let miniHtml = '';
           dayAppts.slice(0, 2).forEach((ap) => {
-            miniHtml += `<div class="cal-mini-item">${escapeHtml(ap.time)} ${escapeHtml(ap.clientName)}</div>`;
+            const endT = getAppointmentEndTime(ap);
+            miniHtml += `<div class="cal-mini-item">${escapeHtml(ap.time)}–${escapeHtml(endT)} ${escapeHtml(ap.clientName)}</div>`;
           });
           if (dayAppts.length > 2) {
             miniHtml += `<div class="cal-mini-item">+${dayAppts.length - 2} további</div>`;
@@ -1533,6 +1872,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         }
 
         listEl.innerHTML = dayAppts.map((ap) => {
+          const endT = getAppointmentEndTime(ap);
           const srvNames = (ap.serviceIds || []).map((sid) => {
             const found = services.find((s) => s.id === sid);
             return found ? `${found.name} (${formatFt(found.price)})` : 'Szolgáltatás';
@@ -1545,7 +1885,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
             <div class="appt-item">
               <div class="appt-top">
                 <div>
-                  <span class="appt-time">${escapeHtml(ap.time)}</span>
+                  <span class="appt-time">${escapeHtml(ap.time)} - ${escapeHtml(endT)}</span>
                   <span class="appt-client">${escapeHtml(ap.clientName)}</span>
                   <div style="margin-top:3px;">
                     <a class="appt-phone" href="tel:${escapeHtml(ap.clientPhone)}">${escapeHtml(ap.clientPhone)}</a>
@@ -1601,10 +1941,25 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
 
       // --- APPOINTMENT MODAL ---
       const apptModal = document.getElementById('appt-modal');
+      const apptTimeInput = document.getElementById('appt-time');
+      const apptEndTimeInput = document.getElementById('appt-end-time');
+      let endTimeManuallyEdited = false;
+
+      apptEndTimeInput.addEventListener('input', () => {
+        endTimeManuallyEdited = true;
+      });
+
+      apptTimeInput.addEventListener('change', () => {
+        if (!endTimeManuallyEdited || apptEndTimeInput.value <= apptTimeInput.value) {
+          apptEndTimeInput.value = addMinutesToTime(apptTimeInput.value, 60);
+        }
+      });
 
       const openAppointmentModal = (prefillDate, preselectedServiceIds = [], prefillClientId = '') => {
         document.getElementById('appt-date').value = prefillDate || selectedDate || todayStr();
-        document.getElementById('appt-time').value = '10:00';
+        apptTimeInput.value = '10:00';
+        apptEndTimeInput.value = '11:00';
+        endTimeManuallyEdited = false;
         document.getElementById('appt-note').value = '';
         document.getElementById('appt-save-client-chk').checked = true;
         document.getElementById('appt-add-iphone-cal-chk').checked = true;
@@ -1685,11 +2040,18 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         const name = document.getElementById('appt-client-name').value.trim();
         const phone = document.getElementById('appt-client-phone').value.trim();
         const date = document.getElementById('appt-date').value;
-        const time = document.getElementById('appt-time').value;
+        const time = apptTimeInput.value;
+        const endTime = apptEndTimeInput.value;
         const note = document.getElementById('appt-note').value.trim();
         const shouldSaveClient = document.getElementById('appt-save-client-chk').checked;
         const shouldAddIphoneCal = document.getElementById('appt-add-iphone-cal-chk').checked;
         let selectedClientId = document.getElementById('appt-saved-client').value;
+
+        if (endTime <= time) {
+          alert('A befejezés időpontjának későbbre kell esnie, mint a kezdésnek.');
+          apptEndTimeInput.focus();
+          return;
+        }
 
         const checkedIds = [];
         let totalPrice = 0;
@@ -1721,6 +2083,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
           clientPhone: phone,
           date,
           time,
+          endTime,
           serviceIds: checkedIds,
           totalPrice,
           note
@@ -1744,7 +2107,168 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         }
       });
 
-      // --- 2. CALCULATOR VIEW ---
+      // --- 2. SUMMARY / STATISTICS VIEW ---
+      const statsFromInput = document.getElementById('stats-from-date');
+      const statsToInput = document.getElementById('stats-to-date');
+      let activeStatsPreset = '30d';
+
+      const applyStatsPreset = (preset) => {
+        activeStatsPreset = preset;
+        document.querySelectorAll('.stats-preset-btn').forEach((btn) => {
+          btn.className = btn.dataset.preset === preset
+            ? 'btn btn-soft btn-sm stats-preset-btn active'
+            : 'btn btn-outline btn-sm stats-preset-btn';
+        });
+
+        const today = new Date();
+        const toIso = formatIsoDate(today);
+
+        if (preset === '30d') {
+          const start = new Date(today);
+          start.setDate(start.getDate() - 30);
+          statsFromInput.value = formatIsoDate(start);
+          statsToInput.value = toIso;
+        } else if (preset === '7d') {
+          const start = new Date(today);
+          start.setDate(start.getDate() - 7);
+          statsFromInput.value = formatIsoDate(start);
+          statsToInput.value = toIso;
+        } else if (preset === 'this-month') {
+          const start = new Date(today.getFullYear(), today.getMonth(), 1);
+          const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          statsFromInput.value = formatIsoDate(start);
+          statsToInput.value = formatIsoDate(end);
+        } else if (preset === 'last-month') {
+          const start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          const end = new Date(today.getFullYear(), today.getMonth(), 0);
+          statsFromInput.value = formatIsoDate(start);
+          statsToInput.value = formatIsoDate(end);
+        } else if (preset === 'all') {
+          statsFromInput.value = '';
+          statsToInput.value = '';
+        }
+
+        renderStatsView();
+      };
+
+      document.querySelectorAll('.stats-preset-btn').forEach((btn) => {
+        btn.addEventListener('click', () => applyStatsPreset(btn.dataset.preset));
+      });
+
+      const onCustomStatsDateChange = () => {
+        activeStatsPreset = 'custom';
+        document.querySelectorAll('.stats-preset-btn').forEach((btn) => {
+          btn.className = 'btn btn-outline btn-sm stats-preset-btn';
+        });
+        renderStatsView();
+      };
+
+      statsFromInput.addEventListener('change', onCustomStatsDateChange);
+      statsToInput.addEventListener('change', onCustomStatsDateChange);
+
+      const renderStatsView = () => {
+        const fromIso = statsFromInput.value;
+        const toIso = statsToInput.value;
+
+        const presetNames = {
+          '30d': 'Elmúlt 30 nap',
+          '7d': 'Elmúlt 7 nap',
+          'this-month': 'Ez a hónap',
+          'last-month': 'Előző hónap',
+          'all': 'Teljes időszak',
+          'custom': 'Egyéni időszak'
+        };
+
+        const rangeDesc = (fromIso || toIso)
+          ? ` (${fromIso ? formatDateHu(fromIso) : '...'} – ${toIso ? formatDateHu(toIso) : '...'})`
+          : '';
+        document.getElementById('stats-period-label').textContent =
+          `Kiválasztott időszak: ${presetNames[activeStatsPreset] || 'Egyéni időszak'}${rangeDesc}`;
+
+        const filteredAppts = appointments.filter((ap) => {
+          if (fromIso && ap.date < fromIso) return false;
+          if (toIso && ap.date > toIso) return false;
+          return true;
+        });
+
+        const totalVisits = filteredAppts.length;
+        const uniqueClientsSet = new Set(
+          filteredAppts.map((ap) => ap.clientId || `${(ap.clientName || '').trim().toLowerCase()}|${(ap.clientPhone || '').trim()}`)
+        );
+        const totalRevenue = filteredAppts.reduce((sum, ap) => sum + Number(ap.totalPrice || 0), 0);
+        const avgRevenue = totalVisits > 0 ? Math.round(totalRevenue / totalVisits) : 0;
+
+        const countsMap = {};
+        let totalServiceItems = 0;
+
+        filteredAppts.forEach((ap) => {
+          (ap.serviceIds || []).forEach((sid) => {
+            totalServiceItems++;
+            if (!countsMap[sid]) {
+              const found = services.find((s) => s.id === sid);
+              countsMap[sid] = {
+                id: sid,
+                name: found ? found.name : 'Korábban törölt szolgáltatás',
+                category: found ? found.category : 'Egyéb',
+                unitPrice: found ? Number(found.price || 0) : 0,
+                count: 0,
+                revenue: 0
+              };
+            }
+            countsMap[sid].count += 1;
+            countsMap[sid].revenue += countsMap[sid].unitPrice;
+          });
+        });
+
+        const breakdown = Object.values(countsMap).sort((a, b) => b.count - a.count || b.revenue - a.revenue);
+
+        document.getElementById('stats-kpi-row').innerHTML = `
+          <div class="stat-box">
+            <div class="stat-label">Vendégek száma</div>
+            <div class="stat-value">${totalVisits} vendég</div>
+            <div class="stat-sub">${uniqueClientsSet.size} különböző személy</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Összes bevétel</div>
+            <div class="stat-value">${formatFt(totalRevenue)}</div>
+            <div class="stat-sub">Átlag: ${formatFt(avgRevenue)} / alkalom</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Kért szolgáltatások</div>
+            <div class="stat-value">${totalServiceItems} db</div>
+            <div class="stat-sub">${breakdown.length} féle szolgáltatásból</div>
+          </div>
+        `;
+
+        const tbody = document.getElementById('stats-services-body');
+        if (breakdown.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:24px;">A kiválasztott időszakban még nincs rögzített szolgáltatás.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = breakdown.map((item) => {
+          const pct = totalServiceItems > 0 ? Math.round((item.count / totalServiceItems) * 100) : 0;
+          return `
+            <tr>
+              <td>
+                <div style="font-weight:700;">${escapeHtml(item.name)}</div>
+                <span class="badge badge-cat" style="margin-top:3px;">${escapeHtml(item.category)}</span>
+              </td>
+              <td data-label="Mennyiség" style="font-weight:700;">${item.count} db</td>
+              <td data-label="Arány">
+                <div style="font-size:0.82rem; font-weight:600; color:var(--text-muted);">${pct}%</div>
+                <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
+              </td>
+              <td data-label="Bevétel" style="text-align:right; font-weight:700; color:var(--pink-600);">${formatFt(item.revenue)}</td>
+            </tr>
+          `;
+        }).join('');
+      };
+
+      // Initialize default 30-day range
+      applyStatsPreset('30d');
+
+      // --- 3. CALCULATOR VIEW ---
       let calcSelectedIds = new Set();
 
       const updateCalculatorTotal = () => {
@@ -1812,7 +2336,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         openAppointmentModal(selectedDate, Array.from(calcSelectedIds));
       });
 
-      // --- 3. SERVICES & PRICES ---
+      // --- 4. SERVICES & PRICES ---
       const renderServicesTable = () => {
         const tbody = document.getElementById('services-table-body');
         if (services.length === 0) {
@@ -1821,10 +2345,10 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         }
         tbody.innerHTML = services.map((s) => `
           <tr>
-            <td style="font-weight:600;">${escapeHtml(s.name)}</td>
-            <td><span class="badge badge-cat">${escapeHtml(s.category)}</span></td>
-            <td style="font-weight:700; color:var(--pink-600);">${formatFt(s.price)}</td>
-            <td style="text-align:right; white-space:nowrap;">
+            <td style="font-weight:700;">${escapeHtml(s.name)}</td>
+            <td data-label="Kategória"><span class="badge badge-cat">${escapeHtml(s.category)}</span></td>
+            <td data-label="Ár" style="font-weight:700; color:var(--pink-600);">${formatFt(s.price)}</td>
+            <td class="mobile-actions-cell" style="text-align:right; white-space:nowrap;">
               <button type="button" class="btn btn-soft btn-sm" onclick="editServicePrice('${s.id}')">Ár módosítása</button>
               <button type="button" class="btn btn-danger-soft" onclick="deleteService('${s.id}')">Törlés</button>
             </td>
@@ -1865,7 +2389,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         renderServicesTable();
       };
 
-      // --- 4. MATERIALS / INVENTORY TRACKING ---
+      // --- 5. MATERIALS / INVENTORY TRACKING ---
       document.getElementById('mat-bought-date').value = todayStr();
 
       const calcDaysBetween = (startIso, endIso) => {
@@ -1924,16 +2448,16 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
                 <div style="font-weight:700;">${escapeHtml(m.name)}</div>
                 <div style="font-size:0.82rem; color:var(--text-muted);">${escapeHtml(m.type)}</div>
               </td>
-              <td style="font-weight:700; color:var(--pink-600);">${formatFt(m.price)}</td>
-              <td>${formatDateHu(m.boughtDate)}</td>
-              <td>${isFinished ? formatDateHu(m.finishedDate) : '-'}</td>
-              <td>${durationText}</td>
-              <td>
+              <td data-label="Ár" style="font-weight:700; color:var(--pink-600);">${formatFt(m.price)}</td>
+              <td data-label="Vásárlás">${formatDateHu(m.boughtDate)}</td>
+              <td data-label="Elfogyott">${isFinished ? formatDateHu(m.finishedDate) : '-'}</td>
+              <td data-label="Tartósság">${durationText}</td>
+              <td data-label="Állapot">
                 ${isFinished
                   ? `<span class="badge badge-done">Elfogyott</span>`
                   : `<span class="badge badge-active">Használatban</span>`}
               </td>
-              <td style="text-align:right; white-space:nowrap;">
+              <td class="mobile-actions-cell" style="text-align:right; white-space:nowrap;">
                 ${!isFinished
                   ? `<button type="button" class="btn btn-primary btn-sm" onclick="openFinishMaterialModal('${m.id}')">Elfogyott</button>`
                   : `<button type="button" class="btn btn-outline btn-sm" onclick="reopenMaterial('${m.id}')">Visszaállít</button>`}
@@ -2020,7 +2544,7 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
         renderMaterialsTable();
       };
 
-      // --- 5. CLIENTS ---
+      // --- 6. CLIENTS ---
       const renderClientsTable = () => {
         const tbody = document.getElementById('clients-table-body');
         const q = (document.getElementById('client-search').value || '').toLowerCase().trim();
@@ -2038,10 +2562,10 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
           return `
             <tr>
               <td style="font-weight:700;">${escapeHtml(c.name)}</td>
-              <td><a class="appt-phone" href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a></td>
-              <td style="color:var(--text-muted);">${escapeHtml(c.note || '-')}</td>
-              <td><span class="badge badge-cat">${count} alkalom</span></td>
-              <td style="text-align:right; white-space:nowrap;">
+              <td data-label="Telefon"><a class="appt-phone" href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a></td>
+              <td data-label="Megjegyzés" style="color:var(--text-muted);">${escapeHtml(c.note || '-')}</td>
+              <td data-label="Időpontok"><span class="badge badge-cat">${count} alkalom</span></td>
+              <td class="mobile-actions-cell" style="text-align:right; white-space:nowrap;">
                 <button type="button" class="btn btn-soft btn-sm" onclick="bookForClient('${c.id}')">+ Időpont</button>
                 <button type="button" class="btn btn-danger-soft" onclick="deleteClient('${c.id}')">Törlés</button>
               </td>
@@ -2148,7 +2672,6 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
           }
           renderCalendar();
         } else {
-          // Ensure initial state is mirrored to IndexedDB
           save(STORAGE_KEYS.services, services);
           save(STORAGE_KEYS.clients, clients);
           save(STORAGE_KEYS.appointments, appointments);
@@ -2163,5 +2686,3 @@ Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, ka
   </script>
 </body>
 </html>
-
-```
