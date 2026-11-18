@@ -1,12 +1,18 @@
+A fehér képernyőt az okozta, hogy az előnézeti vagy korlátozott böngészőkörnyezetben a helyi tárhely elérése hibát dobott, illetve iPhone-on a fájlnézegetőből megnyitva nem fut le a programkód. Az alábbi verzió már **hibatűrő kettős mentést (`localStorage` + `IndexedDB`)** használ — így a böngésző bezárása után is megőrzi az összes adatot az eszközön —, tartalmazza az **iPhone Naptárba mentés** funkciót, valamint a megadott szolgáltatásokat és árakat.
+
+Töltsd fel az alábbi kódot **`index.html`** néven a GitHub repository-ba, kapcsold be a **Settings -> Pages** menüben, majd nyisd meg a kapott `github.io` linket iPhone Safariban (a Megosztás -> **Főképernyőhöz adás** gombbal önálló alkalmazásként is kirakhatod a kezdőképernyőre).
+
+```html
 <!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Szalon Napló" />
+  <meta name="theme-color" content="#fae4ec" />
   <title>Szalon Napló — Kozmetika & Fodrászat</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-main: #fdf7f9;
@@ -26,7 +32,7 @@
       --done-bg: #f3e8ec;
       --done-text: #865668;
       --shadow-sm: 0 4px 14px rgba(197, 98, 136, 0.08);
-      --shadow-md: 0 10px 28px rgba(197, 98, 136, 0.13);
+      --shadow-md: 0 10px 28px rgba(197, 98, 136, 0.14);
       --radius-lg: 20px;
       --radius-md: 14px;
       --radius-sm: 10px;
@@ -36,27 +42,29 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-main);
       color: var(--text-main);
       line-height: 1.5;
       min-height: 100vh;
       background-image:
-        radial-gradient(circle at 8% 10%, rgba(243, 205, 219, 0.42) 0%, transparent 32%),
-        radial-gradient(circle at 92% 85%, rgba(243, 205, 219, 0.35) 0%, transparent 36%);
+        radial-gradient(circle at 8% 10%, rgba(243, 205, 219, 0.45) 0%, transparent 34%),
+        radial-gradient(circle at 92% 85%, rgba(243, 205, 219, 0.38) 0%, transparent 38%);
     }
 
-    h1, h2, h3, .serif {
-      font-family: 'Playfair Display', Georgia, serif;
+    h1, h2, h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
     }
 
     .app-shell {
-      max-width: 1220px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 18px 48px;
+      padding: 18px 16px 56px;
     }
 
     /* Header Banner with Soft Pink Floral SVG Graphics */
@@ -66,8 +74,8 @@
       background: linear-gradient(135deg, #fff6f9 0%, #fae4ec 55%, #f5d3e0 100%);
       border: 1px solid var(--pink-200);
       border-radius: var(--radius-lg);
-      padding: 24px 28px;
-      margin-bottom: 20px;
+      padding: 22px 26px;
+      margin-bottom: 18px;
       box-shadow: var(--shadow-sm);
       display: flex;
       align-items: center;
@@ -84,7 +92,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       color: var(--pink-600);
       border: 1px solid var(--pink-200);
       font-size: 0.78rem;
@@ -96,14 +104,14 @@
     }
 
     .hero-header h1 {
-      font-size: 1.85rem;
+      font-size: 1.75rem;
       color: var(--text-main);
       margin-bottom: 4px;
     }
 
     .hero-header p {
       color: var(--text-muted);
-      font-size: 0.94rem;
+      font-size: 0.92rem;
     }
 
     .hero-art {
@@ -126,26 +134,26 @@
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .nav-btn {
       flex: 1 1 auto;
-      min-width: 135px;
+      min-width: 130px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 11px 16px;
+      padding: 11px 14px;
       border: none;
       border-radius: var(--radius-md);
       background: transparent;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
 
     .nav-btn:hover {
@@ -168,16 +176,10 @@
     /* Views */
     .view-section {
       display: none;
-      animation: fadeIn 0.22s ease;
     }
 
     .view-section.active {
       display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Cards & Layout Grids */
@@ -185,7 +187,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 22px;
+      padding: 20px;
       box-shadow: var(--shadow-sm);
     }
 
@@ -195,11 +197,11 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .card-title {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       color: var(--text-main);
     }
 
@@ -221,26 +223,1945 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      padding: 10px 16px;
+      gap: 6px;
+      padding: 10px 15px;
       border-radius: var(--radius-sm);
       border: 1px solid transparent;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.89rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.18s ease;
+      transition: all 0.16s ease;
+      text-decoration: none;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
-      color: #fff;
+      color: #ffffff;
       box-shadow: 0 4px 12px rgba(197, 98, 136, 0.25);
     }
 
     .btn-primary:hover {
       background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
-      transform: translateY(-1px);
     }
 
-    .btn
+    .btn-soft {
+      background: var(--pink-100);
+      color: var(--pink-600);
+      border-color: var(--pink-200);
+    }
+
+    .btn-soft:hover {
+      background: var(--pink-200);
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-soft);
+      border-color: var(--pink-300);
+    }
+
+    .btn-danger-soft {
+      background: #fdf0f3;
+      color: #b43c5e;
+      border-color: #f4cdd8;
+      padding: 6px 10px;
+      font-size: 0.81rem;
+    }
+
+    .btn-sm {
+      padding: 6px 11px;
+      font-size: 0.82rem;
+    }
+
+    /* Calendar Grid */
+    .cal-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cal-month-label {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      min-width: 155px;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+
+    .cal-day {
+      min-height: 80px;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.14s ease;
+    }
+
+    .cal-day:hover {
+      border-color: var(--pink-400);
+      background: #ffffff;
+    }
+
+    .cal-day.other-month {
+      opacity: 0.42;
+      background: #faf5f7;
+    }
+
+    .cal-day.today {
+      border: 2px solid var(--pink-400);
+    }
+
+    .cal-day.selected {
+      background: var(--pink-100);
+      border-color: var(--pink-500);
+      box-shadow: inset 0 0 0 1px var(--pink-400);
+    }
+
+    .cal-day-num {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cal-count-pill {
+      background: var(--pink-500);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+
+    .cal-mini-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-top: 4px;
+    }
+
+    .cal-mini-item {
+      background: #ffffff;
+      border-left: 3px solid var(--pink-400);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Day Appointments List */
+    .appt-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .appt-item {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--pink-400);
+      border-radius: var(--radius-md);
+      padding: 14px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .appt-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .appt-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .appt-time {
+      display: inline-block;
+      background: var(--pink-500);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.81rem;
+      padding: 2px 9px;
+      border-radius: 999px;
+      margin-right: 6px;
+    }
+
+    .appt-client {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .appt-phone {
+      font-size: 0.85rem;
+      color: var(--pink-600);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .service-tag {
+      background: #ffffff;
+      border: 1px solid var(--pink-200);
+      color: var(--text-main);
+      font-size: 0.79rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .appt-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 7px;
+      border-top: 1px dashed var(--pink-200);
+      font-size: 0.9rem;
+    }
+
+    .price-highlight {
+      font-weight: 700;
+      color: var(--pink-600);
+      font-size: 1rem;
+    }
+
+    /* Forms & Inputs */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--pink-200);
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--pink-500);
+      box-shadow: 0 0 0 3px rgba(217, 130, 163, 0.2);
+    }
+
+    /* Checklist Boxes */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    .check-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-main);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .check-card.checked {
+      background: var(--pink-100);
+      border-color: var(--pink-400);
+    }
+
+    .check-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .check-left input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      accent-color: var(--pink-500);
+      cursor: pointer;
+    }
+
+    .check-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .check-cat {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .check-price {
+      font-weight: 700;
+      color: var(--pink-600);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    /* Total Summary Bar */
+    .total-banner {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #fbe8ef, #f6d5e2);
+      border: 1px solid var(--pink-300);
+      border-radius: var(--radius-md);
+      padding: 15px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .total-amount {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--pink-600);
+    }
+
+    /* Tables / Lists */
+    .data-table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--pink-200);
+    }
+
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.77rem;
+      font-weight: 600;
+    }
+
+    .badge-active {
+      background: var(--success-bg);
+      color: var(--success-text);
+    }
+
+    .badge-done {
+      background: var(--done-bg);
+      color: var(--done-text);
+    }
+
+    .badge-cat {
+      background: var(--pink-100);
+      color: var(--pink-600);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(59, 38, 46, 0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border: 1px solid var(--pink-200);
+      border-radius: var(--radius-lg);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px 14px;
+      color: var(--text-muted);
+      background: var(--bg-main);
+      border: 1px dashed var(--pink-200);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: var(--bg-soft);
+      border: 1px solid var(--pink-200);
+      border-radius: var(--radius-md);
+      padding: 13px 15px;
+    }
+
+    .stat-label {
+      font-size: 0.79rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--pink-600);
+      margin-top: 2px;
+    }
+
+    .storage-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--success-text);
+      background: var(--success-bg);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .footer-tools {
+      margin-top: 26px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .hero-header {
+        padding: 16px;
+      }
+      .hero-header h1 {
+        font-size: 1.38rem;
+      }
+      .cal-day {
+        min-height: 60px;
+        padding: 4px;
+      }
+      .cal-mini-item {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Hero Header with Delicate Pink Botanical & Salon SVG Illustration -->
+    <header class="hero-header">
+      <div class="hero-content">
+        <div class="hero-badge">Kozmetika &amp; Fodrászat</div>
+        <h1>Szépségszalon Határidőnapló</h1>
+        <p>Időpontok, iPhone Naptár szinkron, vendéglista, árkalkulátor és anyagfogyás egy helyen.</p>
+      </div>
+      <svg class="hero-art" viewBox="0 0 260 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="195" cy="70" r="68" fill="#F4C7D8" fill-opacity="0.45"/>
+        <circle cx="145" cy="125" r="46" fill="#F9DCE7" fill-opacity="0.7"/>
+        <path d="M180 155C182 110 202 72 238 42" stroke="#C56288" stroke-width="2" stroke-linecap="round"/>
+        <path d="M196 108C214 102 228 106 234 116C220 120 206 118 196 108Z" fill="#E7ADC3"/>
+        <path d="M206 82C190 70 184 56 188 44C198 54 205 66 206 82Z" fill="#D982A3" fill-opacity="0.75"/>
+        <path d="M187 128C168 122 156 110 156 96C170 102 181 113 187 128Z" fill="#E7ADC3"/>
+        <circle cx="238" cy="40" r="9" fill="#D982A3"/>
+        <circle cx="238" cy="40" r="4" fill="#FFF6F9"/>
+        <circle cx="164" cy="54" r="5" fill="#E7ADC3"/>
+        <circle cx="222" cy="138" r="6" fill="#D982A3" fill-opacity="0.5"/>
+      </svg>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="nav-bar" aria-label="Főmenü">
+      <button type="button" class="nav-btn active" data-view="calendar-view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Naptár &amp; Időpontok
+      </button>
+      <button type="button" class="nav-btn" data-view="calculator-view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="14" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="16" y2="15"/><line x1="8" y1="19" x2="16" y2="19"/></svg>
+        Árkalkulátor
+      </button>
+      <button type="button" class="nav-btn" data-view="services-view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5"/></svg>
+        Szolgáltatások &amp; Árak
+      </button>
+      <button type="button" class="nav-btn" data-view="materials-view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6v4l3 4v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-8l3-4V3z"/><line x1="6" y1="13" x2="18" y2="13"/></svg>
+        Anyagok &amp; Fogyás
+      </button>
+      <button type="button" class="nav-btn" data-view="clients-view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Mentett Vendégek
+      </button>
+    </nav>
+
+    <!-- 1. CALENDAR VIEW -->
+    <section id="calendar-view" class="view-section active">
+      <div class="calendar-layout">
+        <div class="card">
+          <div class="card-header">
+            <div class="cal-controls">
+              <button type="button" class="btn btn-soft btn-sm" id="prev-month-btn" title="Előző hónap">&lt;</button>
+              <div class="cal-month-label" id="cal-month-label">Naptár</div>
+              <button type="button" class="btn btn-soft btn-sm" id="next-month-btn" title="Következő hónap">&gt;</button>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn btn-outline btn-sm" id="today-btn">Ma</button>
+              <button type="button" class="btn btn-primary btn-sm" id="open-appt-modal-btn">+ Új időpont</button>
+            </div>
+          </div>
+
+          <div class="cal-weekdays">
+            <div>Hét</div>
+            <div>Kedd</div>
+            <div>Sze</div>
+            <div>Csüt</div>
+            <div>Pén</div>
+            <div>Szo</div>
+            <div>Vas</div>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title" id="selected-date-title">Kiválasztott nap</h2>
+              <p style="font-size:0.84rem; color:var(--text-muted);" id="selected-date-summary">0 beírt időpont</p>
+            </div>
+            <button type="button" class="btn btn-soft btn-sm" id="add-appt-selected-day-btn">+ Ide rögzít</button>
+          </div>
+          <div id="day-appointments-list" class="appt-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. CALCULATOR VIEW -->
+    <section id="calculator-view" class="view-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Szolgáltatás Árkalkulátor</h2>
+            <p style="font-size:0.88rem; color:var(--text-muted);">Pipáld ki az elvégzett szolgáltatásokat, és a rendszer azonnal kiszámolja a végösszeget.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="calc-reset-btn">Kijelölés törlése</button>
+        </div>
+
+        <div id="calc-checklist" class="checklist-grid"></div>
+
+        <div class="form-grid" style="margin-top:18px; max-width:520px;">
+          <div class="form-group">
+            <label for="calc-extra">Extra anyagköltség / felár (Ft)</label>
+            <input type="number" id="calc-extra" value="0" min="0" step="100" />
+          </div>
+          <div class="form-group">
+            <label for="calc-discount">Kedvezmény (%)</label>
+            <input type="number" id="calc-discount" value="0" min="0" max="100" step="5" />
+          </div>
+        </div>
+
+        <div class="total-banner">
+          <div>
+            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Kiválasztott tételek: <span id="calc-count">0</span> db</div>
+            <div class="total-amount" id="calc-total">0 Ft</div>
+          </div>
+          <button type="button" class="btn btn-primary" id="calc-to-appt-btn">Átvitel új időpontba</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SERVICES & PRICES VIEW -->
+    <section id="services-view" class="view-section">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <h2 class="card-title">Új szolgáltatás felvétele</h2>
+        </div>
+        <form id="service-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="srv-name">Szolgáltatás neve *</label>
+              <input type="text" id="srv-name" placeholder="pl. Szempilla festés" required />
+            </div>
+            <div class="form-group">
+              <label for="srv-category">Kategória</label>
+              <select id="srv-category">
+                <option value="Szemöldök & Szempilla">Szemöldök &amp; Szempilla</option>
+                <option value="Kozmetika">Kozmetika</option>
+                <option value="Fodrászat">Fodrászat</option>
+                <option value="Egyéb">Egyéb</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="srv-price">Ár (Ft) *</label>
+              <input type="number" id="srv-price" placeholder="pl. 1500" min="0" step="50" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Szolgáltatás mentése</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Szolgáltatások és Árlista</h2>
+        </div>
+        <div class="data-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Szolgáltatás</th>
+                <th>Kategória</th>
+                <th>Ár</th>
+                <th style="text-align:right;">Műveletek</th>
+              </tr>
+            </thead>
+            <tbody id="services-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MATERIALS / INVENTORY VIEW -->
+    <section id="materials-view" class="view-section">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Új anyag / kellék rögzítése</h2>
+            <p style="font-size:0.86rem; color:var(--text-muted);">Rögzítsd mikor vetted vagy bontottad fel (pl. szempilla festék), és jelöld be amikor elfogy.</p>
+          </div>
+        </div>
+        <form id="material-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="mat-name">Anyag megnevezése *</label>
+              <input type="text" id="mat-name" placeholder="pl. Szempilla festék" required />
+            </div>
+            <div class="form-group">
+              <label for="mat-type">Típus / Márka / Árnyalat *</label>
+              <input type="text" id="mat-type" placeholder="pl. RefectoCil No.1 Mélyfekete" required />
+            </div>
+            <div class="form-group">
+              <label for="mat-price">Ár (Ft) *</label>
+              <input type="number" id="mat-price" placeholder="pl. 3200" min="0" step="50" required />
+            </div>
+            <div class="form-group">
+              <label for="mat-bought-date">Vásárlás / Felbontás dátuma *</label>
+              <input type="date" id="mat-bought-date" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Anyag mentése</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Anyagnyilvántartás és Tartósság</h2>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-soft btn-sm mat-filter active" data-filter="all">Összes</button>
+            <button type="button" class="btn btn-outline btn-sm mat-filter" data-filter="active">Használatban</button>
+            <button type="button" class="btn btn-outline btn-sm mat-filter" data-filter="finished">Elfogyott</button>
+          </div>
+        </div>
+
+        <div class="stats-row" id="materials-stats"></div>
+
+        <div class="data-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Anyag &amp; Típus</th>
+                <th>Ár</th>
+                <th>Vásárlás dátuma</th>
+                <th>Elfogyott dátuma</th>
+                <th>Meddig bírta</th>
+                <th>Állapot</th>
+                <th style="text-align:right;">Műveletek</th>
+              </tr>
+            </thead>
+            <tbody id="materials-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SAVED CLIENTS VIEW -->
+    <section id="clients-view" class="view-section">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <h2 class="card-title">Új vendég mentése</h2>
+        </div>
+        <form id="client-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="cli-name">Vendég neve *</label>
+              <input type="text" id="cli-name" placeholder="pl. Nagy Eszter" required />
+            </div>
+            <div class="form-group">
+              <label for="cli-phone">Telefonszám *</label>
+              <input type="tel" id="cli-phone" placeholder="pl. +36 30 123 4567" required />
+            </div>
+            <div class="form-group">
+              <label for="cli-note">Megjegyzés (opcionális)</label>
+              <input type="text" id="cli-note" placeholder="pl. Érzékeny szem, 7.1 hajfesték" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Vendég mentése</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Mentett Vendégek</h2>
+          <input type="text" id="client-search" placeholder="Keresés név vagy telefonszám alapján..." style="max-width:270px;" />
+        </div>
+        <div class="data-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Név</th>
+                <th>Telefonszám</th>
+                <th>Megjegyzés</th>
+                <th>Időpontok</th>
+                <th style="text-align:right;">Műveletek</th>
+              </tr>
+            </thead>
+            <tbody id="clients-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Backup & Storage Status -->
+    <footer class="footer-tools">
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span class="storage-pill" id="storage-status-badge">Helyi mentés aktív</span>
+        <span>Az adatok automatikusan mentődnek a telefonodra / böngésződbe.</span>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-soft btn-sm" id="export-all-ics-btn">Összes időpont iPhone Naptárba</button>
+        <button type="button" class="btn btn-outline btn-sm" id="export-data-btn">Biztonsági mentés (.json)</button>
+        <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+          Mentés visszatöltése
+          <input type="file" id="import-data-input" accept=".json" style="display:none;" />
+        </label>
+      </div>
+    </footer>
+  </div>
+
+  <!-- NEW APPOINTMENT MODAL -->
+  <div class="modal-backdrop" id="appt-modal">
+    <div class="modal-box">
+      <div class="card-header">
+        <h2 class="card-title">Új időpont rögzítése</h2>
+        <button type="button" class="btn btn-outline btn-sm" id="close-appt-modal-btn">Bezárás</button>
+      </div>
+
+      <form id="appt-form">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="appt-saved-client">Korábban mentett vendég kiválasztása (opcionális)</label>
+          <select id="appt-saved-client">
+            <option value="">-- Új vendég adatainak megadása --</option>
+          </select>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="appt-client-name">Vendég neve *</label>
+            <input type="text" id="appt-client-name" placeholder="pl. Kiss Anna" required />
+          </div>
+          <div class="form-group">
+            <label for="appt-client-phone">Telefonszám *</label>
+            <input type="tel" id="appt-client-phone" placeholder="pl. +36 20 987 6543" required />
+          </div>
+          <div class="form-group">
+            <label for="appt-date">Dátum *</label>
+            <input type="date" id="appt-date" required />
+          </div>
+          <div class="form-group">
+            <label for="appt-time">Időpont *</label>
+            <input type="time" id="appt-time" value="10:00" required />
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+          <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.88rem; font-weight:600; cursor:pointer;">
+            <input type="checkbox" id="appt-save-client-chk" checked style="width:18px; height:18px; accent-color:var(--pink-500);" />
+            Vendég nevének és telefonszámának mentése későbbre
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.88rem; font-weight:600; cursor:pointer; color:var(--pink-600);">
+            <input type="checkbox" id="appt-add-iphone-cal-chk" checked style="width:18px; height:18px; accent-color:var(--pink-500);" />
+            Megnyitás az iPhone Naptárban is mentés után
+          </label>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label>Milyen szolgáltatásra jön? (Pipáld ki)</label>
+          <div id="appt-services-checklist" class="checklist-grid" style="margin-top:6px;"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="appt-note">Megjegyzés (opcionális)</label>
+          <input type="text" id="appt-note" placeholder="pl. Festékkód, külön kérés..." />
+        </div>
+
+        <div class="total-banner" style="margin-top:12px;">
+          <div>
+            <div style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Számított végösszeg</div>
+            <div class="total-amount" id="appt-calculated-total">0 Ft</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Időpont mentése</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MARK MATERIAL FINISHED MODAL -->
+  <div class="modal-backdrop" id="finish-mat-modal">
+    <div class="modal-box" style="max-width:420px;">
+      <div class="card-header">
+        <h2 class="card-title">Anyag elfogyásának rögzítése</h2>
+        <button type="button" class="btn btn-outline btn-sm" id="close-finish-modal-btn">Mégse</button>
+      </div>
+      <p id="finish-mat-label" style="font-size:0.92rem; margin-bottom:14px; color:var(--text-muted);"></p>
+      <form id="finish-mat-form">
+        <input type="hidden" id="finish-mat-id" />
+        <div class="form-group" style="margin-bottom:16px;">
+          <label for="finish-mat-date">Mikor fogyott el? *</label>
+          <input type="date" id="finish-mat-date" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Elfogyott jelölése és tartósság mentése</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEYS = {
+        services: 'szalon_services_v2',
+        clients: 'szalon_clients_v2',
+        appointments: 'szalon_appointments_v2',
+        materials: 'szalon_materials_v2',
+        initialized: 'szalon_initialized_v2'
+      };
+
+      const IDB_NAME = 'SzalonNaploPersistentDB';
+      const IDB_STORE = 'keyval';
+      const memoryFallback = {};
+
+      // Safe localStorage helpers (never throw in restricted contexts)
+      const safeLocalGet = (key) => {
+        try {
+          return window.localStorage.getItem(key);
+        } catch (e) {
+          return memoryFallback[key] || null;
+        }
+      };
+
+      const safeLocalSet = (key, val) => {
+        memoryFallback[key] = val;
+        try {
+          window.localStorage.setItem(key, val);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      };
+
+      // IndexedDB mirror for permanent iPhone storage persistence
+      const openIDB = () => {
+        return new Promise((resolve) => {
+          try {
+            if (!window.indexedDB) return resolve(null);
+            const req = window.indexedDB.open(IDB_NAME, 1);
+            req.onupgradeneeded = (ev) => {
+              const db = ev.target.result;
+              if (!db.objectStoreNames.contains(IDB_STORE)) {
+                db.createObjectStore(IDB_STORE);
+              }
+            };
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => resolve(null);
+          } catch (e) {
+            resolve(null);
+          }
+        });
+      };
+
+      const idbSet = async (key, value) => {
+        const db = await openIDB();
+        if (!db) return;
+        try {
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).put(value, key);
+        } catch (e) {}
+      };
+
+      const idbGet = async (key) => {
+        const db = await openIDB();
+        if (!db) return null;
+        return new Promise((resolve) => {
+          try {
+            const tx = db.transaction(IDB_STORE, 'readonly');
+            const req = tx.objectStore(IDB_STORE).get(key);
+            req.onsuccess = () => resolve(req.result ?? null);
+            req.onerror = () => resolve(null);
+          } catch (e) {
+            resolve(null);
+          }
+        });
+      };
+
+      // Request persistent storage on iOS/mobile browsers
+      if (navigator.storage && navigator.storage.persist) {
+        try { navigator.storage.persist(); } catch (e) {}
+      }
+
+      const todayStr = () => {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      };
+
+      const formatFt = (num) => {
+        return Number(num || 0).toLocaleString('hu-HU') + ' Ft';
+      };
+
+      const formatDateHu = (iso) => {
+        if (!iso) return '-';
+        const parts = iso.split('-');
+        if (parts.length !== 3) return iso;
+        return `${parts[0]}. ${parts[1]}. ${parts[2]}.`;
+      };
+
+      const escapeHtml = (str) => {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      };
+
+      const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+      const load = (key, fallback) => {
+        try {
+          const raw = safeLocalGet(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      };
+
+      const save = (key, value) => {
+        const json = JSON.stringify(value);
+        safeLocalSet(key, json);
+        idbSet(key, value);
+      };
+
+      // Default services requested by user
+      const getDefaultServices = () => [
+        { id: 'srv_szempilla', name: 'Szempilla festés', category: 'Szemöldök & Szempilla', price: 1500 },
+        { id: 'srv_szemoldok_f', name: 'Szemöldök festés', category: 'Szemöldök & Szempilla', price: 1000 },
+        { id: 'srv_szemoldok_form', name: 'Szemöldök formázás', category: 'Szemöldök & Szempilla', price: 500 },
+        { id: 'srv_bajusz', name: 'Bajusz gyanta', category: 'Kozmetika', price: 3000 }
+      ];
+
+      if (!safeLocalGet(STORAGE_KEYS.initialized)) {
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 21);
+        const pastIso = pastDate.toISOString().slice(0, 10);
+
+        save(STORAGE_KEYS.services, getDefaultServices());
+        save(STORAGE_KEYS.clients, []);
+        save(STORAGE_KEYS.appointments, []);
+        save(STORAGE_KEYS.materials, [
+          {
+            id: 'mat_demo_1',
+            name: 'Szempilla festék',
+            type: 'RefectoCil No. 1 Mélyfekete (15 ml)',
+            price: 3400,
+            boughtDate: pastIso,
+            finishedDate: null
+          }
+        ]);
+        safeLocalSet(STORAGE_KEYS.initialized, '1');
+        idbSet(STORAGE_KEYS.initialized, '1');
+      }
+
+      let services = load(STORAGE_KEYS.services, getDefaultServices());
+      let clients = load(STORAGE_KEYS.clients, []);
+      let appointments = load(STORAGE_KEYS.appointments, []);
+      let materials = load(STORAGE_KEYS.materials, []);
+
+      // Calendar State
+      const now = new Date();
+      let currentYear = now.getFullYear();
+      let currentMonth = now.getMonth();
+      let selectedDate = todayStr();
+      let materialFilter = 'all';
+
+      // --- iPHONE / APPLE CALENDAR (.ICS) INTEGRATION ---
+      const escapeIcsText = (text) => {
+        return String(text || '')
+          .replace(/\\/g, '\\\\')
+          .replace(/;/g, '\\;')
+          .replace(/,/g, '\\,')
+          .replace(/\r?\n/g, '\\n');
+      };
+
+      const buildIcsContent = (apptsToExport) => {
+        const nowStamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        const lines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Szalon Naplo//Kozmetika es Fodraszat//HU',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH'
+        ];
+
+        apptsToExport.forEach((ap) => {
+          const datePart = (ap.date || todayStr()).replace(/-/g, '');
+          const timeParts = (ap.time || '10:00').split(':');
+          const startHour = Number(timeParts[0] || 10);
+          const startMin = Number(timeParts[1] || 0);
+
+          // Default 60 minutes duration
+          const totalMins = startHour * 60 + startMin + 60;
+          const endHour = Math.floor(totalMins / 60) % 24;
+          const endMin = totalMins % 60;
+          const endDatePart = totalMins >= 24 * 60
+            ? (() => {
+                const d = new Date(ap.date + 'T00:00:00');
+                d.setDate(d.getDate() + 1);
+                return d.toISOString().slice(0, 10).replace(/-/g, '');
+              })()
+            : datePart;
+
+          const startStr = `${datePart}T${String(startHour).padStart(2, '0')}${String(startMin).padStart(2, '0')}00`;
+          const endStr = `${endDatePart}T${String(endHour).padStart(2, '0')}${String(endMin).padStart(2, '0')}00`;
+
+          const srvNames = (ap.serviceIds || []).map((sid) => {
+            const found = services.find((s) => s.id === sid);
+            return found ? `${found.name} (${formatFt(found.price)})` : '';
+          }).filter(Boolean);
+
+          const summary = `Vendég: ${ap.clientName}${srvNames.length ? ' - ' + srvNames.join(', ') : ''}`;
+          const descLines = [
+            `Vendég: ${ap.clientName}`,
+            `Telefon: ${ap.clientPhone}`,
+            srvNames.length ? `Szolgáltatások: ${srvNames.join(', ')}` : '',
+            `Végösszeg: ${formatFt(ap.totalPrice)}`,
+            ap.note ? `Megjegyzés: ${ap.note}` : ''
+          ].filter(Boolean).join('\n');
+
+          lines.push(
+            'BEGIN:VEVENT',
+            `UID:${ap.id}@szalon-naplo.local`,
+            `DTSTAMP:${nowStamp}`,
+            `DTSTART:${startStr}`,
+            `DTEND:${endStr}`,
+            `SUMMARY:${escapeIcsText(summary)}`,
+            `DESCRIPTION:${escapeIcsText(descLines)}`,
+            'END:VEVENT'
+          );
+        });
+
+        lines.push('END:VCALENDAR');
+        return lines.join('\r\n');
+      };
+
+      const openInIphoneCalendar = (apptsToExport, filename = 'idopont.ics') => {
+        if (!apptsToExport || apptsToExport.length === 0) return;
+        const icsText = buildIcsContent(apptsToExport);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (isIOS) {
+          // Navigating directly to text/calendar data URI triggers iOS Calendar native "Add Event" sheet
+          const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsText);
+          window.location.href = dataUri;
+        } else {
+          const blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+      };
+
+      window.syncSingleAppointmentToCalendar = (apptId) => {
+        const ap = appointments.find((a) => a.id === apptId);
+        if (ap) {
+          openInIphoneCalendar([ap], `idopont-${ap.date}.ics`);
+        }
+      };
+
+      document.getElementById('export-all-ics-btn').addEventListener('click', () => {
+        if (appointments.length === 0) {
+          alert('Még nincs rögzített időpont a naptárban.');
+          return;
+        }
+        openInIphoneCalendar(appointments, `szalon-osszes-idopont-${todayStr()}.ics`);
+      });
+
+      // Navigation
+      const navButtons = document.querySelectorAll('.nav-btn');
+      const viewSections = document.querySelectorAll('.view-section');
+
+      const switchView = (viewId) => {
+        navButtons.forEach((b) => b.classList.toggle('active', b.dataset.view === viewId));
+        viewSections.forEach((s) => s.classList.toggle('active', s.id === viewId));
+        if (viewId === 'calendar-view') renderCalendar();
+        if (viewId === 'calculator-view') renderCalculator();
+        if (viewId === 'services-view') renderServicesTable();
+        if (viewId === 'materials-view') renderMaterialsTable();
+        if (viewId === 'clients-view') renderClientsTable();
+      };
+
+      navButtons.forEach((btn) => {
+        btn.addEventListener('click', () => switchView(btn.dataset.view));
+      });
+
+      // --- 1. CALENDAR & APPOINTMENTS ---
+      const renderCalendar = () => {
+        const monthNames = [
+          'január', 'február', 'március', 'április', 'május', 'június',
+          'július', 'augusztus', 'szeptember', 'október', 'november', 'december'
+        ];
+        document.getElementById('cal-month-label').textContent = `${currentYear}. ${monthNames[currentMonth]}`;
+
+        const grid = document.getElementById('cal-grid');
+        grid.innerHTML = '';
+
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+        let startWeekday = (firstDayOfMonth.getDay() + 6) % 7;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+
+        const today = todayStr();
+        const totalCells = Math.ceil((startWeekday + daysInMonth) / 7) * 7;
+
+        for (let i = 0; i < totalCells; i++) {
+          let cellYear = currentYear;
+          let cellMonth = currentMonth;
+          let dayNum;
+          let isOtherMonth = false;
+
+          if (i < startWeekday) {
+            dayNum = prevMonthDays - startWeekday + i + 1;
+            isOtherMonth = true;
+            cellMonth = currentMonth - 1;
+            if (cellMonth < 0) {
+              cellMonth = 11;
+              cellYear--;
+            }
+          } else if (i >= startWeekday + daysInMonth) {
+            dayNum = i - (startWeekday + daysInMonth) + 1;
+            isOtherMonth = true;
+            cellMonth = currentMonth + 1;
+            if (cellMonth > 11) {
+              cellMonth = 0;
+              cellYear++;
+            }
+          } else {
+            dayNum = i - startWeekday + 1;
+          }
+
+          const iso = `${cellYear}-${String(cellMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+          const dayAppts = appointments
+            .filter((a) => a.date === iso)
+            .sort((a, b) => a.time.localeCompare(b.time));
+
+          const cell = document.createElement('div');
+          cell.className = 'cal-day';
+          if (isOtherMonth) cell.classList.add('other-month');
+          if (iso === today) cell.classList.add('today');
+          if (iso === selectedDate) cell.classList.add('selected');
+
+          let miniHtml = '';
+          dayAppts.slice(0, 2).forEach((ap) => {
+            miniHtml += `<div class="cal-mini-item">${escapeHtml(ap.time)} ${escapeHtml(ap.clientName)}</div>`;
+          });
+          if (dayAppts.length > 2) {
+            miniHtml += `<div class="cal-mini-item">+${dayAppts.length - 2} további</div>`;
+          }
+
+          cell.innerHTML = `
+            <div class="cal-day-num">
+              <span>${dayNum}</span>
+              ${dayAppts.length > 0 ? `<span class="cal-count-pill">${dayAppts.length}</span>` : ''}
+            </div>
+            <div class="cal-mini-list">${miniHtml}</div>
+          `;
+
+          cell.addEventListener('click', () => {
+            selectedDate = iso;
+            if (isOtherMonth) {
+              currentYear = cellYear;
+              currentMonth = cellMonth;
+            }
+            renderCalendar();
+          });
+
+          grid.appendChild(cell);
+        }
+
+        renderDayAppointments();
+      };
+
+      const renderDayAppointments = () => {
+        document.getElementById('selected-date-title').textContent = formatDateHu(selectedDate);
+        const listEl = document.getElementById('day-appointments-list');
+        const dayAppts = appointments
+          .filter((a) => a.date === selectedDate)
+          .sort((a, b) => a.time.localeCompare(b.time));
+
+        const totalDayRevenue = dayAppts.reduce((sum, a) => sum + Number(a.totalPrice || 0), 0);
+        document.getElementById('selected-date-summary').textContent =
+          `${dayAppts.length} időpont • Napi összeg: ${formatFt(totalDayRevenue)}`;
+
+        if (dayAppts.length === 0) {
+          listEl.innerHTML = `<div class="empty-state">Erre a napra még nincs beírt időpont. Kattints a "+ Ide rögzít" gombra új vendég felvételéhez.</div>`;
+          return;
+        }
+
+        listEl.innerHTML = dayAppts.map((ap) => {
+          const srvNames = (ap.serviceIds || []).map((sid) => {
+            const found = services.find((s) => s.id === sid);
+            return found ? `${found.name} (${formatFt(found.price)})` : 'Szolgáltatás';
+          });
+          const tagsHtml = srvNames.length
+            ? srvNames.map((n) => `<span class="service-tag">${escapeHtml(n)}</span>`).join('')
+            : `<span class="service-tag">Nincs külön szolgáltatás jelölve</span>`;
+
+          return `
+            <div class="appt-item">
+              <div class="appt-top">
+                <div>
+                  <span class="appt-time">${escapeHtml(ap.time)}</span>
+                  <span class="appt-client">${escapeHtml(ap.clientName)}</span>
+                  <div style="margin-top:3px;">
+                    <a class="appt-phone" href="tel:${escapeHtml(ap.clientPhone)}">${escapeHtml(ap.clientPhone)}</a>
+                  </div>
+                </div>
+                <div class="appt-actions">
+                  <button type="button" class="btn btn-soft btn-sm" onclick="syncSingleAppointmentToCalendar('${ap.id}')">iPhone Naptárba</button>
+                  <button type="button" class="btn btn-danger-soft" onclick="deleteAppointment('${ap.id}')">Törlés</button>
+                </div>
+              </div>
+              <div class="tag-row">${tagsHtml}</div>
+              ${ap.note ? `<div style="font-size:0.83rem; color:var(--text-muted);">Megjegyzés: ${escapeHtml(ap.note)}</div>` : ''}
+              <div class="appt-bottom">
+                <span style="color:var(--text-muted); font-size:0.83rem;">Fizetendő összeg:</span>
+                <span class="price-highlight">${formatFt(ap.totalPrice)}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      };
+
+      window.deleteAppointment = (id) => {
+        appointments = appointments.filter((a) => a.id !== id);
+        save(STORAGE_KEYS.appointments, appointments);
+        renderCalendar();
+      };
+
+      document.getElementById('prev-month-btn').addEventListener('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        renderCalendar();
+      });
+
+      document.getElementById('next-month-btn').addEventListener('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        renderCalendar();
+      });
+
+      document.getElementById('today-btn').addEventListener('click', () => {
+        const t = new Date();
+        currentYear = t.getFullYear();
+        currentMonth = t.getMonth();
+        selectedDate = todayStr();
+        renderCalendar();
+      });
+
+      // --- APPOINTMENT MODAL ---
+      const apptModal = document.getElementById('appt-modal');
+
+      const openAppointmentModal = (prefillDate, preselectedServiceIds = [], prefillClientId = '') => {
+        document.getElementById('appt-date').value = prefillDate || selectedDate || todayStr();
+        document.getElementById('appt-time').value = '10:00';
+        document.getElementById('appt-note').value = '';
+        document.getElementById('appt-save-client-chk').checked = true;
+        document.getElementById('appt-add-iphone-cal-chk').checked = true;
+
+        const selectEl = document.getElementById('appt-saved-client');
+        selectEl.innerHTML = `<option value="">-- Új vendég adatainak megadása --</option>` +
+          clients.map((c) => `<option value="${c.id}">${escapeHtml(c.name)} (${escapeHtml(c.phone)})</option>`).join('');
+
+        if (prefillClientId) {
+          selectEl.value = prefillClientId;
+          const cli = clients.find((c) => c.id === prefillClientId);
+          document.getElementById('appt-client-name').value = cli ? cli.name : '';
+          document.getElementById('appt-client-phone').value = cli ? cli.phone : '';
+        } else {
+          selectEl.value = '';
+          document.getElementById('appt-client-name').value = '';
+          document.getElementById('appt-client-phone').value = '';
+        }
+
+        const listEl = document.getElementById('appt-services-checklist');
+        if (services.length === 0) {
+          listEl.innerHTML = `<div class="empty-state">Még nincsenek szolgáltatások rögzítve. Vedd fel őket a Szolgáltatások menüpontban.</div>`;
+        } else {
+          listEl.innerHTML = services.map((s) => {
+            const isChecked = preselectedServiceIds.includes(s.id);
+            return `
+              <label class="check-card ${isChecked ? 'checked' : ''}">
+                <span class="check-left">
+                  <input type="checkbox" class="appt-srv-chk" value="${s.id}" data-price="${s.price}" ${isChecked ? 'checked' : ''} />
+                  <span>
+                    <span class="check-name">${escapeHtml(s.name)}</span>
+                    <span class="check-cat">${escapeHtml(s.category)}</span>
+                  </span>
+                </span>
+                <span class="check-price">${formatFt(s.price)}</span>
+              </label>
+            `;
+          }).join('');
+        }
+
+        const updateModalTotal = () => {
+          let sum = 0;
+          document.querySelectorAll('.appt-srv-chk').forEach((chk) => {
+            chk.closest('.check-card').classList.toggle('checked', chk.checked);
+            if (chk.checked) sum += Number(chk.dataset.price || 0);
+          });
+          document.getElementById('appt-calculated-total').textContent = formatFt(sum);
+        };
+
+        document.querySelectorAll('.appt-srv-chk').forEach((chk) => {
+          chk.addEventListener('change', updateModalTotal);
+        });
+        updateModalTotal();
+
+        apptModal.classList.add('open');
+      };
+
+      document.getElementById('open-appt-modal-btn').addEventListener('click', () => openAppointmentModal(selectedDate));
+      document.getElementById('add-appt-selected-day-btn').addEventListener('click', () => openAppointmentModal(selectedDate));
+      document.getElementById('close-appt-modal-btn').addEventListener('click', () => apptModal.classList.remove('open'));
+
+      document.getElementById('appt-saved-client').addEventListener('change', (e) => {
+        const cid = e.target.value;
+        if (!cid) {
+          document.getElementById('appt-client-name').value = '';
+          document.getElementById('appt-client-phone').value = '';
+          return;
+        }
+        const cli = clients.find((c) => c.id === cid);
+        if (cli) {
+          document.getElementById('appt-client-name').value = cli.name;
+          document.getElementById('appt-client-phone').value = cli.phone;
+        }
+      });
+
+      document.getElementById('appt-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('appt-client-name').value.trim();
+        const phone = document.getElementById('appt-client-phone').value.trim();
+        const date = document.getElementById('appt-date').value;
+        const time = document.getElementById('appt-time').value;
+        const note = document.getElementById('appt-note').value.trim();
+        const shouldSaveClient = document.getElementById('appt-save-client-chk').checked;
+        const shouldAddIphoneCal = document.getElementById('appt-add-iphone-cal-chk').checked;
+        let selectedClientId = document.getElementById('appt-saved-client').value;
+
+        const checkedIds = [];
+        let totalPrice = 0;
+        document.querySelectorAll('.appt-srv-chk:checked').forEach((chk) => {
+          checkedIds.push(chk.value);
+          totalPrice += Number(chk.dataset.price || 0);
+        });
+
+        if (shouldSaveClient && name && phone) {
+          const existing = clients.find(
+            (c) => c.id === selectedClientId || (c.name.toLowerCase() === name.toLowerCase() && c.phone === phone)
+          );
+          if (existing) {
+            existing.name = name;
+            existing.phone = phone;
+            selectedClientId = existing.id;
+          } else {
+            const newCli = { id: uid(), name, phone, note: '' };
+            clients.push(newCli);
+            selectedClientId = newCli.id;
+          }
+          save(STORAGE_KEYS.clients, clients);
+        }
+
+        const newAppt = {
+          id: uid(),
+          clientId: selectedClientId || null,
+          clientName: name,
+          clientPhone: phone,
+          date,
+          time,
+          serviceIds: checkedIds,
+          totalPrice,
+          note
+        };
+
+        appointments.push(newAppt);
+        save(STORAGE_KEYS.appointments, appointments);
+
+        selectedDate = date;
+        const dateParts = date.split('-');
+        currentYear = Number(dateParts[0]);
+        currentMonth = Number(dateParts[1]) - 1;
+
+        apptModal.classList.remove('open');
+        switchView('calendar-view');
+
+        if (shouldAddIphoneCal) {
+          setTimeout(() => {
+            openInIphoneCalendar([newAppt], `idopont-${newAppt.date}.ics`);
+          }, 120);
+        }
+      });
+
+      // --- 2. CALCULATOR VIEW ---
+      let calcSelectedIds = new Set();
+
+      const updateCalculatorTotal = () => {
+        let baseSum = 0;
+        services.forEach((s) => {
+          if (calcSelectedIds.has(s.id)) baseSum += Number(s.price || 0);
+        });
+        const extra = Number(document.getElementById('calc-extra').value || 0);
+        const discount = Math.min(100, Math.max(0, Number(document.getElementById('calc-discount').value || 0)));
+
+        const subtotal = baseSum + extra;
+        const finalTotal = Math.round(subtotal * (1 - discount / 100));
+
+        document.getElementById('calc-count').textContent = calcSelectedIds.size;
+        document.getElementById('calc-total').textContent = formatFt(finalTotal);
+      };
+
+      const renderCalculator = () => {
+        const container = document.getElementById('calc-checklist');
+        if (services.length === 0) {
+          container.innerHTML = `<div class="empty-state">Még nincs rögzített szolgáltatás. Előbb vegyél fel szolgáltatásokat a Szolgáltatások menüpontban.</div>`;
+          updateCalculatorTotal();
+          return;
+        }
+
+        container.innerHTML = services.map((s) => {
+          const isChecked = calcSelectedIds.has(s.id);
+          return `
+            <label class="check-card ${isChecked ? 'checked' : ''}">
+              <span class="check-left">
+                <input type="checkbox" class="calc-srv-chk" value="${s.id}" ${isChecked ? 'checked' : ''} />
+                <span>
+                  <span class="check-name">${escapeHtml(s.name)}</span>
+                  <span class="check-cat">${escapeHtml(s.category)}</span>
+                </span>
+              </span>
+              <span class="check-price">${formatFt(s.price)}</span>
+            </label>
+          `;
+        }).join('');
+
+        document.querySelectorAll('.calc-srv-chk').forEach((chk) => {
+          chk.addEventListener('change', () => {
+            if (chk.checked) calcSelectedIds.add(chk.value);
+            else calcSelectedIds.delete(chk.value);
+            chk.closest('.check-card').classList.toggle('checked', chk.checked);
+            updateCalculatorTotal();
+          });
+        });
+
+        updateCalculatorTotal();
+      };
+
+      document.getElementById('calc-extra').addEventListener('input', updateCalculatorTotal);
+      document.getElementById('calc-discount').addEventListener('input', updateCalculatorTotal);
+
+      document.getElementById('calc-reset-btn').addEventListener('click', () => {
+        calcSelectedIds.clear();
+        document.getElementById('calc-extra').value = 0;
+        document.getElementById('calc-discount').value = 0;
+        renderCalculator();
+      });
+
+      document.getElementById('calc-to-appt-btn').addEventListener('click', () => {
+        openAppointmentModal(selectedDate, Array.from(calcSelectedIds));
+      });
+
+      // --- 3. SERVICES & PRICES ---
+      const renderServicesTable = () => {
+        const tbody = document.getElementById('services-table-body');
+        if (services.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:24px;">Még nincs rögzített szolgáltatás.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = services.map((s) => `
+          <tr>
+            <td style="font-weight:600;">${escapeHtml(s.name)}</td>
+            <td><span class="badge badge-cat">${escapeHtml(s.category)}</span></td>
+            <td style="font-weight:700; color:var(--pink-600);">${formatFt(s.price)}</td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button type="button" class="btn btn-soft btn-sm" onclick="editServicePrice('${s.id}')">Ár módosítása</button>
+              <button type="button" class="btn btn-danger-soft" onclick="deleteService('${s.id}')">Törlés</button>
+            </td>
+          </tr>
+        `).join('');
+      };
+
+      document.getElementById('service-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('srv-name').value.trim();
+        const category = document.getElementById('srv-category').value;
+        const price = Number(document.getElementById('srv-price').value);
+        if (!name || isNaN(price)) return;
+
+        services.push({ id: uid(), name, category, price });
+        save(STORAGE_KEYS.services, services);
+        e.target.reset();
+        renderServicesTable();
+      });
+
+      window.editServicePrice = (id) => {
+        const srv = services.find((s) => s.id === id);
+        if (!srv) return;
+        const input = prompt(`Új ár megadása ehhez: ${srv.name} (Ft)`, srv.price);
+        if (input === null) return;
+        const val = Number(input);
+        if (!isNaN(val) && val >= 0) {
+          srv.price = val;
+          save(STORAGE_KEYS.services, services);
+          renderServicesTable();
+        }
+      };
+
+      window.deleteService = (id) => {
+        services = services.filter((s) => s.id !== id);
+        calcSelectedIds.delete(id);
+        save(STORAGE_KEYS.services, services);
+        renderServicesTable();
+      };
+
+      // --- 4. MATERIALS / INVENTORY TRACKING ---
+      document.getElementById('mat-bought-date').value = todayStr();
+
+      const calcDaysBetween = (startIso, endIso) => {
+        const start = new Date(startIso + 'T00:00:00');
+        const end = new Date(endIso + 'T00:00:00');
+        const diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
+        return Math.max(0, diff);
+      };
+
+      const renderMaterialsTable = () => {
+        const tbody = document.getElementById('materials-table-body');
+        const statsEl = document.getElementById('materials-stats');
+
+        const activeCount = materials.filter((m) => !m.finishedDate).length;
+        const finishedCount = materials.filter((m) => Boolean(m.finishedDate)).length;
+        const totalSpent = materials.reduce((sum, m) => sum + Number(m.price || 0), 0);
+
+        statsEl.innerHTML = `
+          <div class="stat-box">
+            <div class="stat-label">Jelenleg használatban</div>
+            <div class="stat-value">${activeCount} db</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Már elfogyott</div>
+            <div class="stat-value">${finishedCount} db</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Összes anyagköltség</div>
+            <div class="stat-value">${formatFt(totalSpent)}</div>
+          </div>
+        `;
+
+        const filtered = materials.filter((m) => {
+          if (materialFilter === 'active') return !m.finishedDate;
+          if (materialFilter === 'finished') return Boolean(m.finishedDate);
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">Nincs megjeleníthető anyag ebben a nézetben.</td></tr>`;
+          return;
+        }
+
+        const today = todayStr();
+        tbody.innerHTML = filtered.map((m) => {
+          const isFinished = Boolean(m.finishedDate);
+          const days = calcDaysBetween(m.boughtDate, isFinished ? m.finishedDate : today);
+          const weeks = (days / 7).toFixed(1).replace('.', ',');
+          const durationText = isFinished
+            ? `<strong>${days} napig</strong> bírta (${weeks} hét)`
+            : `${days} napja használatban`;
+
+          return `
+            <tr>
+              <td>
+                <div style="font-weight:700;">${escapeHtml(m.name)}</div>
+                <div style="font-size:0.82rem; color:var(--text-muted);">${escapeHtml(m.type)}</div>
+              </td>
+              <td style="font-weight:700; color:var(--pink-600);">${formatFt(m.price)}</td>
+              <td>${formatDateHu(m.boughtDate)}</td>
+              <td>${isFinished ? formatDateHu(m.finishedDate) : '-'}</td>
+              <td>${durationText}</td>
+              <td>
+                ${isFinished
+                  ? `<span class="badge badge-done">Elfogyott</span>`
+                  : `<span class="badge badge-active">Használatban</span>`}
+              </td>
+              <td style="text-align:right; white-space:nowrap;">
+                ${!isFinished
+                  ? `<button type="button" class="btn btn-primary btn-sm" onclick="openFinishMaterialModal('${m.id}')">Elfogyott</button>`
+                  : `<button type="button" class="btn btn-outline btn-sm" onclick="reopenMaterial('${m.id}')">Visszaállít</button>`}
+                <button type="button" class="btn btn-danger-soft" onclick="deleteMaterial('${m.id}')">Törlés</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      };
+
+      document.querySelectorAll('.mat-filter').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          materialFilter = btn.dataset.filter;
+          document.querySelectorAll('.mat-filter').forEach((b) => {
+            b.className = b === btn ? 'btn btn-soft btn-sm mat-filter active' : 'btn btn-outline btn-sm mat-filter';
+          });
+          renderMaterialsTable();
+        });
+      });
+
+      document.getElementById('material-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('mat-name').value.trim();
+        const type = document.getElementById('mat-type').value.trim();
+        const price = Number(document.getElementById('mat-price').value);
+        const boughtDate = document.getElementById('mat-bought-date').value;
+        if (!name || !type || !boughtDate) return;
+
+        materials.unshift({
+          id: uid(),
+          name,
+          type,
+          price,
+          boughtDate,
+          finishedDate: null
+        });
+        save(STORAGE_KEYS.materials, materials);
+        e.target.reset();
+        document.getElementById('mat-bought-date').value = todayStr();
+        renderMaterialsTable();
+      });
+
+      const finishMatModal = document.getElementById('finish-mat-modal');
+
+      window.openFinishMaterialModal = (id) => {
+        const mat = materials.find((m) => m.id === id);
+        if (!mat) return;
+        document.getElementById('finish-mat-id').value = id;
+        document.getElementById('finish-mat-label').textContent =
+          `${mat.name} (${mat.type}) — Vásárlás dátuma: ${formatDateHu(mat.boughtDate)}`;
+        document.getElementById('finish-mat-date').value = todayStr();
+        finishMatModal.classList.add('open');
+      };
+
+      document.getElementById('close-finish-modal-btn').addEventListener('click', () => {
+        finishMatModal.classList.remove('open');
+      });
+
+      document.getElementById('finish-mat-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('finish-mat-id').value;
+        const endDate = document.getElementById('finish-mat-date').value;
+        const mat = materials.find((m) => m.id === id);
+        if (mat && endDate) {
+          mat.finishedDate = endDate;
+          save(STORAGE_KEYS.materials, materials);
+          renderMaterialsTable();
+        }
+        finishMatModal.classList.remove('open');
+      });
+
+      window.reopenMaterial = (id) => {
+        const mat = materials.find((m) => m.id === id);
+        if (mat) {
+          mat.finishedDate = null;
+          save(STORAGE_KEYS.materials, materials);
+          renderMaterialsTable();
+        }
+      };
+
+      window.deleteMaterial = (id) => {
+        materials = materials.filter((m) => m.id !== id);
+        save(STORAGE_KEYS.materials, materials);
+        renderMaterialsTable();
+      };
+
+      // --- 5. CLIENTS ---
+      const renderClientsTable = () => {
+        const tbody = document.getElementById('clients-table-body');
+        const q = (document.getElementById('client-search').value || '').toLowerCase().trim();
+        const filtered = clients.filter((c) =>
+          c.name.toLowerCase().includes(q) || c.phone.toLowerCase().includes(q)
+        );
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:24px;">Nincs találat a vendéglistában.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map((c) => {
+          const count = appointments.filter((a) => a.clientId === c.id || a.clientName === c.name).length;
+          return `
+            <tr>
+              <td style="font-weight:700;">${escapeHtml(c.name)}</td>
+              <td><a class="appt-phone" href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a></td>
+              <td style="color:var(--text-muted);">${escapeHtml(c.note || '-')}</td>
+              <td><span class="badge badge-cat">${count} alkalom</span></td>
+              <td style="text-align:right; white-space:nowrap;">
+                <button type="button" class="btn btn-soft btn-sm" onclick="bookForClient('${c.id}')">+ Időpont</button>
+                <button type="button" class="btn btn-danger-soft" onclick="deleteClient('${c.id}')">Törlés</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      };
+
+      document.getElementById('client-search').addEventListener('input', renderClientsTable);
+
+      document.getElementById('client-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('cli-name').value.trim();
+        const phone = document.getElementById('cli-phone').value.trim();
+        const note = document.getElementById('cli-note').value.trim();
+        if (!name || !phone) return;
+
+        clients.push({ id: uid(), name, phone, note });
+        save(STORAGE_KEYS.clients, clients);
+        e.target.reset();
+        renderClientsTable();
+      });
+
+      window.bookForClient = (clientId) => {
+        openAppointmentModal(selectedDate, [], clientId);
+      };
+
+      window.deleteClient = (id) => {
+        clients = clients.filter((c) => c.id !== id);
+        save(STORAGE_KEYS.clients, clients);
+        renderClientsTable();
+      };
+
+      // --- BACKUP EXPORT / IMPORT ---
+      document.getElementById('export-data-btn').addEventListener('click', () => {
+        const payload = {
+          exportedAt: new Date().toISOString(),
+          services,
+          clients,
+          appointments,
+          materials
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `szalon-mentes-${todayStr()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+
+      document.getElementById('import-data-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (Array.isArray(data.services)) services = data.services;
+            if (Array.isArray(data.clients)) clients = data.clients;
+            if (Array.isArray(data.appointments)) appointments = data.appointments;
+            if (Array.isArray(data.materials)) materials = data.materials;
+            save(STORAGE_KEYS.services, services);
+            save(STORAGE_KEYS.clients, clients);
+            save(STORAGE_KEYS.appointments, appointments);
+            save(STORAGE_KEYS.materials, materials);
+            renderCalendar();
+            alert('A biztonsági mentés sikeresen visszatöltve.');
+          } catch (err) {
+            alert('Hibás mentési fájl formátum.');
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      });
+
+      // Restore from IndexedDB if Safari cleared localStorage after inactivity
+      (async () => {
+        const idbInit = await idbGet(STORAGE_KEYS.initialized);
+        if (idbInit) {
+          const [idbSrv, idbCli, idbApp, idbMat] = await Promise.all([
+            idbGet(STORAGE_KEYS.services),
+            idbGet(STORAGE_KEYS.clients),
+            idbGet(STORAGE_KEYS.appointments),
+            idbGet(STORAGE_KEYS.materials)
+          ]);
+          if (Array.isArray(idbSrv) && idbSrv.length) {
+            services = idbSrv;
+            safeLocalSet(STORAGE_KEYS.services, JSON.stringify(services));
+          }
+          if (Array.isArray(idbCli)) {
+            clients = idbCli;
+            safeLocalSet(STORAGE_KEYS.clients, JSON.stringify(clients));
+          }
+          if (Array.isArray(idbApp)) {
+            appointments = idbApp;
+            safeLocalSet(STORAGE_KEYS.appointments, JSON.stringify(appointments));
+          }
+          if (Array.isArray(idbMat)) {
+            materials = idbMat;
+            safeLocalSet(STORAGE_KEYS.materials, JSON.stringify(materials));
+          }
+          renderCalendar();
+        } else {
+          // Ensure initial state is mirrored to IndexedDB
+          save(STORAGE_KEYS.services, services);
+          save(STORAGE_KEYS.clients, clients);
+          save(STORAGE_KEYS.appointments, appointments);
+          save(STORAGE_KEYS.materials, materials);
+          idbSet(STORAGE_KEYS.initialized, '1');
+        }
+      })();
+
+      // Immediate initial render
+      renderCalendar();
+    })();
+  </script>
+</body>
+</html>
+
+```
